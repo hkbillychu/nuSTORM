@@ -51,8 +51,6 @@ Class nuSTORMPrdStrght:
       GenerateTrans: Generate transverse phase space (x, y, xp, yp) given
                      representative emittance and beta.  Parabolic distributions
                      generated.
-      getParabolic : Generates a parabolic distributed random number from
-                     -p1 to p1 (p1 input)
       getProdStraighParams: Read csv file and generate Pandas dataframe
       printParams  : Print all paramters
 
@@ -99,8 +97,8 @@ class nuSTORMPrdStrght(object):
 #--------  Simulation methods:
     def GenerateMmtm(self,p0):
         p = -99.
-        dp = p0 * self._pAcc / 2.
-        p  = p0 + nuSTORMPrdStrght.getParabolic(dp)
+        dp = p0 * self._pAcc
+        p  = p0 + getParabolic(dp)
         return p
 
     def Calculatez(self,s):
@@ -109,26 +107,11 @@ class nuSTORMPrdStrght(object):
     def GenerateTrans(self,s):
         r  = np.sqrt(self._epsilon*self._beta) / 1000.
         rp = np.sqrt(self._epsilon/self._beta)
-        x  = nuSTORMPrdStrght.getParabolic(r)
-        y  = nuSTORMPrdStrght.getParabolic(r)
-        xp = nuSTORMPrdStrght.getParabolic(rp)
-        yp = nuSTORMPrdStrght.getParabolic(rp)
+        x  = getParabolic(r)
+        y  = getParabolic(r)
+        xp = getParabolic(rp)
+        yp = getParabolic(rp)
         return x, y, xp, yp
-
-    def getParabolic(p1):
-        ran = getRandom()
-        a = np.array( [ 1., 0., (-3.*p1*p1), (2.*p1*p1*p1*(2.*ran - 1.)) ] )
-        r = np.roots(a)
-        isol = 0
-        for ri in r:
-            if not isinstance(ri, complex):
-                if ri >= -p1:
-                    if ri <= p1:
-                        isol += 1
-                        p = ri
-        if isol != 1:
-            raiseException("nuSTORMPrdStrght.getParabolic; p multiply defined")
-        return p
 
 #--------  I/o methods:
     def GetProdStraightParams(_filename):
