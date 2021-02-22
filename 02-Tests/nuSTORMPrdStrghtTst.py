@@ -55,7 +55,7 @@ ymu = np.array([])
 xpmu = np.array([])
 ypmu = np.array([])
 print()
-for i in range(100000):
+for i in range(50000):
   nmu += 1
   pmu = np.append(pmu, nuPrdStrt.GenerateMmtm(5.))
   zmu = np.append(zmu, nuPrdStrt.Calculatez(50.*getRandom()))
@@ -67,7 +67,7 @@ for i in range(100000):
   if nmu < 11:
       print(nmu, pmu[nmu-1], zmu[nmu-1], x, y, xp, yp)
 
-n, bins, patches = plt.hist(pmu, bins=50, color='y', range=(4.5,5.5))
+n, bins, patches = plt.hist(pmu, bins=50, color='y', range=(4.0,6.0))
 plt.xlabel('Momentum (GeV)')
 plt.ylabel('Entries')
 plt.title('momentum distribution')
