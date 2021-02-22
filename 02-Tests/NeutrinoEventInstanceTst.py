@@ -53,7 +53,7 @@ print()
 print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, \
       "soak test.")
 nuEI = []
-for i in range(100000):
+for i in range(40000):
     nuEI.append(nuEvtInst.NeutrinoEventInstance(5.))
 for i in range(5):
     print("    nuEI[i]:", nuEI[i])
