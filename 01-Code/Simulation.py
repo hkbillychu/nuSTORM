@@ -48,6 +48,7 @@ Created on Thu 10Jan21;11:04: Version history:
 
 #--------  Module dependencies
 import random as __Rnd
+import numpy as np
 
 #--------  Module methods
 def getRandom():
