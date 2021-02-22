@@ -1,0 +1,31 @@
+\section*{Simulation of nuSTORM production straight}
+A rudimentary simulation of nuSTORM has been created in python.
+The simulation is based on the design presented in~\cite{Ahdida:2020whw}.
+To initiate consideration of detector systems and sensitivities the
+following parameters have been adopted for the storage ring, the
+production straight and the muon-beam optics:
+\begin{itemize}
+  \item Total ircumference: 616\,m
+  \item Length of production straight: 180\,m
+  \item Stored muon momentum ($p_\mu$) range: $1 \le p_\mu \le 6$\,GeV
+  \item Momentum acceptance: $\pm 15$\%
+    \begin{itemize}
+      \item Simulate a parabolic momentum distribution with limits
+        $\pm 15$\%
+    \end{itemize}
+  \item Transverse acceptance: 1\,$\pi$\,mm\,rad
+  \item Transverse beta function (in both transverse coordinates: 25000\,mm
+\end{itemize}
+The transverse beta function is taken as “representative” of the
+production straight.
+It is assumed that $\alpha=0$, and that the emittance, $\epsilon$,
+(acceptance) and beta are momentum independent. 
+The width of the transverse phase space is obtained using:
+\begin{eqnarray}
+  x_i        & = & \sqrt{\epsilon \beta} \quad {\rm ; \quad and} \nonumber \\
+  x_i^\prime  & = & \sqrt{\frac{\epsilon}{\beta}} \quad ;  \nonumber
+\end{eqnarray}
+where $x_i$ refers to both transverse coordinates ($x$ and $y$).
+
+\section*{Neutrino flux interface specification}
+\textbf{\color{red} To be drafted.}
