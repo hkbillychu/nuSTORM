@@ -51,11 +51,13 @@ Created on Sat 16Jan21;02:26: Version history:
 """
 
 from copy import deepcopy
+import nuSTORMPrdStrght as nuPrdStrt
 import MuonDecay as MuonDecay
 import MuonConst as MuonConst
 import numpy as np
 
 muCnst = MuonConst.MuonConst()
+nuStrt = nuPrdStrt.nuSTORMPrdStrght('11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
     
 class NeutrinoEventInstance:
 
@@ -123,24 +125,30 @@ class NeutrinoEventInstance:
     def GenerateDcyPhaseSpace(self, Dcy):
         coord = np.array([0., 0., 0., 0., 0., 0.])
 
-        #.. longitudinal position:
-        coord[0], coord[3] = self.GenerateLongiPos(Dcy)
+        #.. Get momentum:
+        Pmu0 = self.getpmu()
+        Pmu  = nuStrt.GenerateMmtm(Pmu0)
+        
+        #.. longitudinal position, "s", z:
+        coord[0] = self.GenerateLongiPos(Dcy, Pmu)
+        coord[3] = nuStrt.Calculatez(coord[0])
 
-        #.. x, y and x', z' all 0 in approx that muon goes along the z axis
+        x, y, xp, yp = nuStrt.GenerateTrans(coord[0])
+        coord[1] = x
+        coord[2] = y
+        coord[4] = xp
+        coord[5] = yp
 
         return coord
 
 #.. Trace space coordinate generation:
-    def GenerateLongiPos(self, Dcy):
-        Pmu = self.getpmu()
-        Emu = np.sqrt(Pmu**2 + \
-                                              NeutrinoEventInstance.__mumass**2)
+    def GenerateLongiPos(self, Dcy, Pmu):
+        Emu = np.sqrt(Pmu**2 + NeutrinoEventInstance.__mumass**2)
         v   = Pmu / Emu * NeutrinoEventInstance.__sol
 
         s   = v * Dcy.getLifetime()
-        z   = s                      #.. limitation: muon trajectory along x=y=0
         
-        return s, z
+        return s
 
 #.. Boost from muon rest frame to nuSTORM frame:
     def Boost2nuSTORM(self, Dcy):
