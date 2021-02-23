@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Test script for "MuonConst" class
+Test script for "MuonConst" class ... initialisation and get methods
 =================================
 
-  Assumes that Code directory (01-Code) is in PYTHONPATH.
-
-Version history:
-----------------
- 1.1: 09Feb20: KL: Prepared for "release"
- 1.0: 31Dec20: First implementation
+  MuonConst.py -- set "relative" path to code
 
 """
 
