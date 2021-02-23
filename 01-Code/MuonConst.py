@@ -37,7 +37,6 @@ Class MuonConst:
   
 Created on Thu 31Dec20;16:42: Version history:
 ----------------------------------------------
- 1.1: 09Feb20: KL: Prepared for "release"
  1.0: 31Dec20: First implementation
 
 @author: kennethlong
@@ -51,7 +50,15 @@ class MuonConst(object):
         if cls.__instance is None:
             #print('MuonConst.__new__: creating the MuonConst object')
             cls.__instance = super(MuonConst, cls).__new__(cls)
-                        
+            
+# Only constants; print values that will be used:
+        #print("MuonConst: version:", cls.CdVrsn(cls))
+        #print("MuonConst: PDG reference:", cls.PDGref(cls))
+        #print("MuonConst: mass (MeV):", cls.mass(cls))
+        #print("MuonConst: lifetime (s):", cls.lifetime(cls))
+        #print("MuonConst: SM Michel parameters [rho, eta, delta]:", cls.Michel(cls))
+        #print("MuonConst: speed of light:", cls.SoL(cls))
+            
         return cls.__instance
 
     def __repr__(self):
