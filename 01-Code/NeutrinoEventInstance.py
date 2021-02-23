@@ -17,9 +17,10 @@ Class NeutrinoEventInstance:
   _pmu      : Muon momentum; i/p argument at instance creation
   _TrcSpcCrd: Trace space (s, x, y, z, x', y') in numpy array at 
               point of decay
-  _P_e
-  _P_nue
-  _P_numu
+  _pmuGen   : Generated muon momentum
+  _P_e      : Electron 4 momentum: (E, array(px, py, pz)), GeV
+  _P_nue    : Electron-neutrino 4 momentum: (E, array(px, py, pz)), GeV
+  _P_numu   : Muon-neuutrino 4 momentum: (E, array(px, py, pz)), GeV
     
   Methods:
   --------
@@ -31,15 +32,16 @@ Class NeutrinoEventInstance:
   Get/set methods:
     getpmu            : Returns muon momentum as real
     getTraceSpaceCoord: Returns trace space: (s, x, y, z, x', y') (m)
+    getpmuGen         : Returns generated muon momentum (GeV)
     gete4mmtm         : Returns electron 4 momentum: (E, array(px, py, pz)), GeV
-    getnue4mmtm       : Returns electron 4 momentum: (E, array(px, py, pz)), GeV
-    getnumu4mmtm      : Returns electron 4 momentum: (E, array(px, py, pz)), GeV
+    getnue4mmtm       : Returns electron-neutrino 4 momentum: (E, array(px, py, pz)), GeV
+    getnumu4mmtm      : Returns muon-neutrino 4 momentum: (E, array(px, py, pz)), GeV
   
   General methods:
     CreateNeutrinos      : Manager for neutrino decay, returns z (m) of decay (real), P_e, P_nue, P_numu, RestFrame
                            Restframe contains a dump of the instance attributes of the MuonDecay class
     GenerateDcyPhaseSpace: Generates trace-space position of decay
-    GenerateLongiPos          : Returns s, z of decay
+    GenerateLongiPos     : Returns s, z of decay
     Boost2nuSTORM        : Boots to nuSTORM rest frame -- i.e. boost to pmu
     RotnBoost            : Operator; rotates and boosts rest-frame coordinates to nuSTORM frame
 
@@ -66,13 +68,11 @@ class NeutrinoEventInstance:
 
     __Debug  = False
 
-    __PrdStrghtLngth = 250.
-
 #--------  "Built-in methods":
     def __init__(self, pmu=5.):
 
         self._pmu = pmu
-        self._TrcSpcCrd, self._P_e, self._P_nue, self._P_numu = self.CreateNeutrinos()
+        self._TrcSpcCrd, self._pmuGen, self._P_e, self._P_nue, self._P_numu = self.CreateNeutrinos()
 
         return
 
@@ -80,11 +80,11 @@ class NeutrinoEventInstance:
         return "NeutrinoEventInstance(pmu)"
 
     def __str__(self):
-        return "NeutrinoEventInstance: p_mu (GeV) = %g, s (m) = %g, z (m) = %g \r\n \
+        return "NeutrinoEventInstance: p_mu (GeV) = %g, s (m) = %g, z (m) = %g, generated momentum=%g, \r\n \
                 P_e (%g, [%g,, %g, %g]), \r\n \
                 P_nue (%g, [%g,, %g, %g]), \r\n \
                 P_numu (%g, [%g,, %g, %g]), \r\n" % \
-            (self._pmu, self._TrcSpcCrd[0], self._TrcSpcCrd[3], \
+            (self._pmu, self._TrcSpcCrd[0], self._TrcSpcCrd[3], self._pmuGen, \
              self._P_e[0], self._P_e[1][0],self._P_e[1][1],self._P_e[1][2], \
              self._P_nue[0], self._P_nue[1][0],self._P_nue[1][1],self._P_nue[1][2], \
              self._P_numu[0], self._P_numu[1][0],self._P_numu[1][1],self._P_numu[1][2] )
@@ -92,18 +92,19 @@ class NeutrinoEventInstance:
 #--------  Generation of neutrino-creation event:
 #.. Manager:
     def CreateNeutrinos(self):
+        PrdStrghtLngth = nuStrt.ProdStrghtLen()
         #.. Prepare--get neutrino decay instance in muon rest frame:
-        z = 2.* NeutrinoEventInstance.__PrdStrghtLngth
+        z = 2.* PrdStrghtLngth
         Dcy = 0
         if NeutrinoEventInstance.__Debug:
             print("NeutrinoEventInstance.CreateNeutrinos: find valid decay")
-        while z > NeutrinoEventInstance.__PrdStrghtLngth:
+        while z > PrdStrghtLngth:
             if isinstance(Dcy, MuonDecay.MuonDecay):
                 del Dcy
             Dcy = MuonDecay.MuonDecay()
-            DcyCoord = self.GenerateDcyPhaseSpace(Dcy)
+            DcyCoord, pmuGen = self.GenerateDcyPhaseSpace(Dcy)
             z = DcyCoord[3]
-        if z > NeutrinoEventInstance.__PrdStrghtLngth:
+        if z > PrdStrghtLngth:
             print("NeutrinoEvenInstance.CreateNeutrinos Alarm:", z)
         if NeutrinoEventInstance.__Debug:
             print("NeutrinoEventInstance.CreateNeutrinos: decay at z =", z)
@@ -119,7 +120,7 @@ class NeutrinoEventInstance:
             print("----> P_numu:", P_numu)
 
         del Dcy
-        return DcyCoord, P_e, P_nue, P_numu
+        return DcyCoord, pmuGen, P_e, P_nue, P_numu
 
 #.. Trace space coordinate generation: array(s, x, y, z, x', y')
     def GenerateDcyPhaseSpace(self, Dcy):
@@ -139,7 +140,7 @@ class NeutrinoEventInstance:
         coord[4] = xp
         coord[5] = yp
 
-        return coord
+        return coord, Pmu
 
 #.. Trace space coordinate generation:
     def GenerateLongiPos(self, Dcy, Pmu):
@@ -236,4 +237,5 @@ class NeutrinoEventInstance:
     def getnumu4mmtm(self):
         return deepcopy(self._P_numu)
 
-    
+    def getpmuGen(self):
+        return deepcopy(self._pmuGen)
