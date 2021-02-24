@@ -69,7 +69,9 @@ Created on Sat 09Jan21;17:18: Version history:
 """
 
 from copy import deepcopy 
-from Simulation import *
+#from Simulation import *
+#from Simulation import getRandom
+import Simulation as Simu
 import numpy as np
 import math as mth
 import MuonConst as muConst
@@ -111,7 +113,7 @@ class MuonDecay:
 
 #--------  "Dynamic methods"; individual lifetime, energies, and angles
     def GenerateLifetime(self):
-        ran = getRandom()
+        ran = Simu.getRandom()
         lt = -mth.log(1.-ran) * muCnst.lifetime()
         return lt
 
@@ -121,14 +123,14 @@ class MuonDecay:
         f_e   = 0.
         while f_nue < (1. - f_e):
 #.. fractional electron energy:
-            f_e = getRandom()
+            f_e = Simu.getRandom()
             
 #.. fractional electron-neutrino energy:
             gam = 1.
             x   = 1.
             while gam > x*(1.-x):
-                x   = getRandom()
-                gam = getRandom()
+                x   = Simu.getRandom()
+                gam = Simu.getRandom()
             f_nue = x
 
         f_numu = 2. - f_e - f_nue
@@ -161,14 +163,14 @@ class MuonDecay:
 
     def ranCoor(self, p_e, p_nue, p_numu):
 #.. Rotation angles
-        alpha  = getRandom() * 2.*mth.pi
+        alpha  = Simu.getRandom() * 2.*mth.pi
         calpha = mth.cos(alpha)
         salpha = mth.sin(alpha)
 
-        cbeta = -1. + 2.*getRandom()
+        cbeta = -1. + 2.*Simu.getRandom()
         sbeta = mth.sqrt(1. - cbeta**2)
 
-        gamma = getRandom() * 2.*mth.pi
+        gamma = Simu.getRandom() * 2.*mth.pi
         cgamma = mth.cos(gamma)
         sgamma = mth.sin(gamma)
 
