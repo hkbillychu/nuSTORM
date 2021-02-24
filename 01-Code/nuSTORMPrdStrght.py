@@ -65,7 +65,7 @@ Created on Thu 21Feb21. Version history:
 import pandas as pnds
 import numpy as np
 from copy import deepcopy
-from Simulation import *
+import Simulation as Simu
 
 class nuSTORMPrdStrght(object):
     __instance = None
@@ -98,7 +98,7 @@ class nuSTORMPrdStrght(object):
     def GenerateMmtm(self,p0):
         p = -99.
         dp = p0 * self._pAcc
-        p  = p0 + getParabolic(dp)
+        p  = p0 + Simu.getParabolic(dp)
         return p
 
     def Calculatez(self,s):
@@ -107,10 +107,10 @@ class nuSTORMPrdStrght(object):
     def GenerateTrans(self,s):
         r  = np.sqrt(self._epsilon*self._beta) / 1000.
         rp = np.sqrt(self._epsilon/self._beta)
-        x  = getParabolic(r)
-        y  = getParabolic(r)
-        xp = getParabolic(rp)
-        yp = getParabolic(rp)
+        x  = Simu.getParabolic(r)
+        y  = Simu.getParabolic(r)
+        xp = Simu.getParabolic(rp)
+        yp = Simu.getParabolic(rp)
         return x, y, xp, yp
 
 #--------  I/o methods:
