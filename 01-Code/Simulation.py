@@ -49,6 +49,8 @@ Created on Thu 10Jan21;11:04: Version history:
 #--------  Module dependencies
 import random as __Rnd
 import numpy as np
+import nuSTORMPrdStrght as nuPrdStrt
+import NeutrinoEventInstance as nuEvtInst
 
 #--------  Module methods
 def getRandom():
@@ -78,14 +80,19 @@ class Simulation(object):
     __instance = None
 
 #--------  "Built-in methods":
-    def __new__(cls):
+    def __new__(cls, NEvt=5, pmu=5., filename=None):
         if cls.__instance is None:
             print('Simulation.__new__: creating the Simulation object')
             print('-------------------')
             cls.__instance = super(Simulation, cls).__new__(cls)
             
             cls.__Rnd.seed(int(cls.__RandomSeed))
-            
+
+            cls._NEvt   = NEvt
+            cls._pmu    = pmu
+            cls._nufile = filename
+            cls._nuStrt = nuPrdStrt.nuSTORMPrdStrght(filename)
+
             # Summarise initialisation
             cls.print(cls)
 
@@ -98,6 +105,34 @@ class Simulation(object):
         self.__repr__()
         self.print()
 
+
+    def RunSim(self):
+        print()
+        print('Simulation.RunSim: simulation begins')
+        print('-----------------')
+        iCnt = 0
+        Scl  = 1
+        prt  = 0
+        for iEvt in range(self._NEvt):
+            if (iEvt % Scl) == 0:
+                iCnt += 1
+                print("    Generating event ", iEvt)
+                prt = 1
+                if iCnt == 10:
+                    Scl  = Scl * 10
+                    iCnt = 0
+
+            nuEvt = nuEvtInst.NeutrinoEventInstance(self._pmu)
+            
+            if prt == 1:
+                prt = 0
+                print(nuEvt)
+                print("    End of this event simulation")
+
+            del(nuEvt)
+
+                
+            
 #--------  "Get methods" only; version, reference, and constants
 #.. Methods believed to be self documenting(!)
 
@@ -110,5 +145,8 @@ class Simulation(object):
 #--------  Utilities:
     def print(self):
         print("    Simulation.print: version:", self.CdVrsn(self))
-        print("    Simulation.print: state of random generator:", self.__Rnd.getstate()[0])
-        
+        print("      state of random generator:", self.__Rnd.getstate()[0])
+        print("      number of events to generate:", self._NEvt)
+        print("      muon beam momentum setting:", self._pmu)
+        print("      nuSTORM specification file:", self._nufile)
+        print(self._nuStrt)
