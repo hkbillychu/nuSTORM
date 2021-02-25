@@ -11,10 +11,10 @@ Test script for "nuSTORMPrdStrght" class
 
 """
 
-import nuSTORMPrdStrght as nuStrt
 import numpy as np
 import matplotlib.pyplot as plt
 from Simulation import *
+import nuSTORMPrdStrght as nuStrt
 
 ##! Start:
 print("========  nuSTORMPrdStrght: tests start  ========")
