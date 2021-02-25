@@ -41,6 +41,7 @@ Class Simulation
 
 Created on Thu 10Jan21;11:04: Version history:
 ----------------------------------------------
+ 1.1: 25Feb21: Add Output to a root file
  1.0: 10Jan21: First implementation
 
 @author: kennethlong
@@ -51,6 +52,7 @@ import random as __Rnd
 import numpy as np
 import nuSTORMPrdStrght as nuPrdStrt
 import NeutrinoEventInstance as nuEvtInst
+import ntupleMake as ntM 
 
 #--------  Module methods
 def getRandom():
@@ -110,6 +112,12 @@ class Simulation(object):
         print()
         print('Simulation.RunSim: simulation begins')
         print('-----------------')
+    # Define root output stream
+        runNumber=9.0                   # set run number
+        nt = ntM.ntupleMake(runNumber, "nuStorm.root")
+        if (nt.Version != 2.5):
+          sys.exit("Wrong version of ntupleMaker")
+
         iCnt = 0
         Scl  = 1
         prt  = 0
@@ -123,6 +131,9 @@ class Simulation(object):
                     iCnt = 0
 
             nuEvt = nuEvtInst.NeutrinoEventInstance(self._pmu)
+#  write to root tree
+            nt.treeFill(nuEvt)
+
             
             if prt == 1:
                 prt = 0
@@ -131,6 +142,7 @@ class Simulation(object):
 
             del(nuEvt)
 
+        nt.output()
                 
             
 #--------  "Get methods" only; version, reference, and constants
