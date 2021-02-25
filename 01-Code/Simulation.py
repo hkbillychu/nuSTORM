@@ -80,7 +80,7 @@ class Simulation(object):
     __instance = None
 
 #--------  "Built-in methods":
-    def __new__(cls, NEvt=5, pmu=5., filename=None):
+    def __new__(cls, NEvt=5, pmu=5., filename=None, rootfilename=None):
         if cls.__instance is None:
             print('Simulation.__new__: creating the Simulation object')
             print('-------------------')
@@ -88,10 +88,11 @@ class Simulation(object):
             
             cls.__Rnd.seed(int(cls.__RandomSeed))
 
-            cls._NEvt   = NEvt
-            cls._pmu    = pmu
-            cls._nufile = filename
-            cls._nuStrt = nuPrdStrt.nuSTORMPrdStrght(filename)
+            cls._NEvt         = NEvt
+            cls._pmu          = pmu
+            cls._nufile       = filename
+            cls._rootfilename = rootfilename
+            cls._nuStrt       = nuPrdStrt.nuSTORMPrdStrght(filename)
 
             # Summarise initialisation
             cls.print(cls)
@@ -149,4 +150,5 @@ class Simulation(object):
         print("      number of events to generate:", self._NEvt)
         print("      muon beam momentum setting:", self._pmu)
         print("      nuSTORM specification file:", self._nufile)
+        print("      root filename for output  :", self._rootfilename)
         print(self._nuStrt)

@@ -83,6 +83,10 @@ class nuSTORMPrdStrght(object):
             cls._pAcc            = cls._PrdStrghtParams.iat[2,2] / 100.
             cls._epsilon         = cls._PrdStrghtParams.iat[3,2]
             cls._beta            = cls._PrdStrghtParams.iat[4,2]
+            cls._HallWallDist    = cls._PrdStrghtParams.iat[5,2]
+            cls._DetHlfWdth      = cls._PrdStrghtParams.iat[6,2]
+            cls._DetLngth        = cls._PrdStrghtParams.iat[7,2]
+            cls._Hall2Det        = cls._PrdStrghtParams.iat[8,2]
             
         return cls.__instance
 
@@ -91,8 +95,10 @@ class nuSTORMPrdStrght(object):
 
     def __str__(self):
         return "nuSTORMPrdStrght: version=%g, circumference=%g m, length of production straight=%g," \
-               " momentum acceptance=%g%%, transverse acceptance=%g pi mm rad, beta=%g mm." % \
-               (self.CdVrsn(), self.Circumference(), self.ProdStrghtLen(), self.pAcc(), self.epsilon(), self.beta())
+               " momentum acceptance=%g%%, transverse acceptance=%g pi mm rad, beta=%g mm. \n" \
+               "                  Production straight to hall wall=%g m, detector halfwidth=%g, detector length=%g, hall wall to detector=%g m." % \
+               (self.CdVrsn(), self.Circumference(), self.ProdStrghtLen(), self.pAcc(), self.epsilon(), self.beta(), \
+                self.HallWallDist(), self.DetHlfWdth(), self.DetLngth(), self.Hall2Det())
 
 #--------  Simulation methods:
     def GenerateMmtm(self,p0):
@@ -139,5 +145,18 @@ class nuSTORMPrdStrght(object):
     def beta(self):        
         return deepcopy(self._beta)
 
+    def HallWallDist(self):
+        return deepcopy(self._HallWallDist)
+
+    def DetHlfWdth(self):
+        return deepcopy(self._DetHlfWdth)
+
+    def DetLngth(self):
+        return deepcopy(self._DetLngth)
+  
+    def Hall2Det(self):
+        return deepcopy(self._Hall2Det)
+
     def printParams(self):
         print(self._PrdStrghtParams)
+      
