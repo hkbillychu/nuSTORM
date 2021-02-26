@@ -53,6 +53,7 @@ import numpy as np
 import nuSTORMPrdStrght as nuPrdStrt
 import NeutrinoEventInstance as nuEvtInst
 import ntupleMake as ntM 
+import plane as plane
 
 #--------  Module methods
 def getRandom():
@@ -116,8 +117,10 @@ class Simulation(object):
     # Define root output stream
         runNumber=9.0                   # set run number
         nt = ntM.ntupleMake(runNumber, "nuStorm.root")
-        if (nt.Version != 2.5):
-          sys.exit("Wrong version of ntupleMaker")
+        if (nt.Version != 2.6):
+          raiseException("Incorrect version of ntupleMaker")
+    # Define the distance of the downstream plane where the flux is calculated
+        fluxPlane = plane.plane(50.0)
 
         iCnt = 0
         Scl  = 1
@@ -131,10 +134,13 @@ class Simulation(object):
                     Scl  = Scl * 10
                     iCnt = 0
 
+#  generate Event
             nuEvt = nuEvtInst.NeutrinoEventInstance(self._pmu)
-#  write to root tree
+#  write to event branch
             nt.treeFill(nuEvt)
-
+#  Check intersection with downstream plane
+            hitE,hitMu=fluxPlane.findHitPosition(nuEvt)
+            nt.fluxFill(hitE, hitMu)
             
             if prt == 1:
                 prt = 0
