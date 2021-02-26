@@ -112,11 +112,13 @@ gROOT.ProcessLine(
    Float_t			nuEpx;\
    Float_t          nuEpy;\
    Float_t          nuEpz;\
+   Float_t          nuEE;\
    Float_t			nuMux;\
    Float_t          nuMuy;\
    Float_t          nuMupx;\
    Float_t          nuMupy;\
    Float_t          nuMupz;\
+   Float_t          nuMuE;\
 };" );
 
 muCnst = MuonConst.MuonConst()
@@ -170,8 +172,8 @@ class ntupleMake:
 # a TTree for the flux data
 		self.flux = ROOT.flux_t()
 		self.fluxTree = TTree('flux', 'nuStorm Event')
-		self.fluxTree.Branch( 'NuE', addressof( self.flux, 'nuEx'), 'x/F:y:px:py:pz')
-		self.fluxTree.Branch( 'NuMu', addressof( self.flux, 'nuMux'), 'x/F:y:px:py:pz')
+		self.fluxTree.Branch( 'NuE', addressof( self.flux, 'nuEx'), 'x/F:y:px:py:pz:E')
+		self.fluxTree.Branch( 'NuMu', addressof( self.flux, 'nuMux'), 'x/F:y:px:py:pz:E')
 
 	def __repr__(self):
 		return "make an TTree"
@@ -222,11 +224,13 @@ class ntupleMake:
 		self.flux.nuEpx = hitE[4]
 		self.flux.nuEpy = hitE[5]
 		self.flux.nuEpz = hitE[6]
+		self.flux.nuEE = hitE[7]
 		self.flux.nuMux = hitMu[0]
 		self.flux.nuMuy = hitMu[1]
 		self.flux.nuMupx = hitMu[4]
 		self.flux.nuMupy = hitMu[5]
 		self.flux.nuMupz = hitMu[6]
+		self.flux.nuMuE = hitMu[7]
 
 		self.fluxTree.Fill()
 

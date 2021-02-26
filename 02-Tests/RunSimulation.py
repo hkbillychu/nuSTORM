@@ -14,7 +14,7 @@ import Simulation as Simu
 print("========  Simulation: start  ========")
 print()
 
-Smltn = Simu.Simulation(50, 5., '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv', 'nuSTORM.root')
+Smltn = Simu.Simulation(5000, 5., '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv', 'nuSTORM.root')
 
 print()
 print(".... Execute simulation")
