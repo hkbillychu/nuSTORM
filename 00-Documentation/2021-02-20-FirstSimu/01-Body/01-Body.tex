@@ -1,4 +1,9 @@
-\section*{Simulation of nuSTORM production straight}
+\newcommand{\dataFormat}{ \noindent \begin{tabular}{|  l | r | c | p{10.0cm} | } \hline Branch: sub-branch & Variable   &  Type  &   Description\\  \hline }
+\newcommand{\info}[4]{ {#1}  & {#2}  & {#3} & {#4} \\}
+\newcommand{\dataFormatEnd} { \hline \end{tabular}  \nl}
+\newcommand{\nl}{\hfill\newline}
+
+\section{Simulation of nuSTORM production straight}
 A rudimentary simulation of nuSTORM has been created in python.
 The simulation is based on the design presented in~\cite{Ahdida:2020whw}.
 To initiate consideration of detector systems and sensitivities the
@@ -27,5 +32,110 @@ The width of the transverse phase space is obtained using:
 \end{eqnarray}
 where $x_i$ refers to both transverse coordinates ($x$ and $y$).
 
-\section*{Neutrino flux interface specification}
-\textbf{\color{red} To be drafted.}
+\section{Neutrino flux interface specification}
+The data is held in root files. 
+The TTree is divided into 3 branches: runInfo; beam; and flux.
+\begin{description}
+  \item {\bf runInfo} is filled once at the beginning of the run and
+    contains information about the run.  \\
+    At present that is the data format version and the run number. The
+    run number should correspond to the number in the name of the
+    file.
+  \item {\bf beam} is  filled once per event. \\
+    The muon beam comes down the nuStorm straight.
+    The co-ordinate system has its origin at the beginning of the 
+    straight.
+    z is the distance down the straight along the machine axis.
+    y is the vertical distance from the machine axis and x is the
+    horizontal distance completing a right handed co-ordinate system
+    (x is to the left as you stand looking down the beam).
+
+    Values of px, py, pz and E are stored for the parent muon and the 
+    decay electron, $\nu_{e}$, and $\nu_{\mu}$.
+
+    Decay contains the values relevant to the muon at the decay
+    point.
+    The x, y, and z co-ordinates in the system defined above are
+    stored.
+    The angle in the x plane px/pz  (x'), and the angle in the y plane
+    (y').
+    The distance travelled by the muon measured along its trajectory
+    s, at present that is just equal to z.
+    The time of the decay.
+    This is not stored at present.
+    The values of the x, y, x' and y' and $E_{\mu}$ are distributed to
+    reflect the energy spread, the $\beta$ and the emittance of the
+    beam.
+    The model for a particular run can be found by looking in the file
+    which contains the description of the simulation conditions for
+    each run.
+  \item {\bf flux} is  filled once per event. \\
+    The neutrinos from the decay are projected forward until they
+    intersect with a plane at right angles to the machine axis and
+    50\,m beyond the end of the production straight.
+    The x, y position at which the neutrino intersects the plane is
+    recorded together with the momentum components and the total
+    energy of the neutrino.
+\end{description}
+
+\section{Data format: version 2.6}
+\dataFormat
+\info{runInfo:information}{runNumber}{Integer}{Run Number}
+\info{}{Version}{Float}{Version number of the data format}
+\info{}{FluxPlaneW}{Float}{Unused}
+\info{}{FluxPlaneH}{Float}{Unused}
+\info{}{PZ}{Float}{Unused}
+\info{}{DetectW}{Float}{Unused}
+\info{}{DetectH}{Float}{Unused}
+\info{}{DetectD}{Float}{Unused}
+\info{}{DetectZ}{Float}{Unused}
+\info{}{Emit}{Char}{Unused}
+\hline
+\hline
+\info{beam:muon}{px}{Float}{muon momentum in x (horizontal plane)}
+\info{}{py}{Float}{muon momentum in y (vertical plane)}
+\info{}{pz}{Float}{muon momentum in z (nuStorm machine axis)}
+\info{}{E}{Float}{muon Energy}
+\hline
+\info{beam:decay}{s}{Float}{Decay distance along the particle trajectory. }
+\info{}{x}{Float}{x at the decay point, horizontal. Beam centre as origin}
+\info{}{y}{Float}{y at the decay point, vertical. Beam centre as origin}
+\info{}{z}{Float}{Decay point from the start of the beam straight as origin}
+\info{}{xp}{Float}{px/pz at the decay point}
+\info{}{yp}{Float}{py/pz at the decay point}
+\info{}{t}{Float}{time of the decay - not filled currently}
+\dataFormatEnd
+
+\vfill
+
+\dataFormat
+\info{beam:electron}{px}{Float}{electron momentum in x (horizontal plane)}
+\info{}{py}{Float}{electron momentum in y (vertical plane)}
+\info{}{pz}{Float}{electron momentum in z (nuStorm machine axis)}
+\info{}{E}{Float}{electron Energy}
+\hline
+\info{beam:$\nu_{\mu}$}{px}{Float}{$\nu_{\mu}$ momentum in x (horizontal plane)}
+\info{}{py}{Float}{$\nu_{\mu}$ momentum in y (vertical plane)}
+\info{}{pz}{Float}{$\nu_{\mu}$ momentum in z (nuStorm machine axis)}
+\info{}{E}{Float}{$\nu_{\mu}$ Energy}
+\hline
+\info{beam:$\nu_{e}$}{px}{Float}{$\nu_{e}$ momentum in x (horizontal plane)}
+\info{}{py}{Float}{$\nu_{e}$ momentum in y (vertical plane)}
+\info{}{pz}{Float}{$\nu_{e}$ momentum in z (nuStorm machine axis)}
+\info{}{E}{Float}{$\nu_{e}$ Energy}
+\hline
+\hline
+\info{flux:$\nu_{e}$}{ex}{Float}{x position of intersection of $\nu_{e}$with flux plane}
+\info{}{ey}{Float}{y position of intersection of $\nu_{e}$with flux plane}
+\info{}{epx}{Float}{px for the $\nu_{e}$ at the flux plane}
+\info{}{epy}{Float}{py for the $\nu_{e}$ at the flux plane}
+\info{}{epz}{Float}{pz for the $\nu_{e}$ at the flux plane}
+\info{}{eE}{Float}{Energy for the $\nu_{e}$ at the flux plane}
+\hline
+\info{flux:$\nu_{\mu}$}{ex}{Float}{x position of intersection of $\nu_{\mu}$with flux plane}
+\info{}{ey}{Float}{y position of intersection of $\nu_{\mu}$with flux plane}
+\info{}{epx}{Float}{px for the $\nu_{\mu}$ at the flux plane}
+\info{}{epy}{Float}{py for the $\nu_{\mu}$ at the flux plane}
+\info{}{epz}{Float}{pz for the $\nu_{\mu}$ at the flux plane}
+\info{}{eE}{Float}{Energy for the $\nu_{\mu}$ at the flux plane}
+\dataFormatEnd
