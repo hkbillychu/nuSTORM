@@ -1,0 +1,84 @@
+\section*{Introduction}
+This document summarises the steps needed to set-up and run nuSIM.
+A summary of the tasks that nuSIM performs may be found
+in~\cite{2021:nuSIM:Doc.01}.
+nuSIM has been developed in python; python~3 is assumed.
+
+\section*{Getting the code}
+nuSIM is maintained using the GitHub version-control system.
+The latest release can be downloaded from the
+\href{https://www.nustorm.org}{\underline{\color{blue} nuSTORM wiki}}
+(\href{https://www.nustorm.org/trac/wiki/Software-and-computing}{\underline{\color{blue}}https://www.nustorm.org/trac/wiki/Software-and-computing}).
+
+\section*{Dependencies and required packages}
+nuSIM requires the following packages:
+\begin{itemize}
+  \item Python modules: \verb+scipy+, \verb+matplotlib+, and
+    \verb+pandas+;
+  \item CERN programme library: \verb+pyroot+ (which may be installed
+    using the standard \verb+root+ installers, see the documentation
+    at \href{https://root.cern/install/}{\underline{\color{blue}https://root.cern/install/}}).
+\end{itemize}
+It may be convenient to run nuSIM in a ``virtual environment''.
+To set this up, after updating your python installation to python~3,
+and installing root, execute the following commands:
+\begin{enumerate}
+  \item \verb+python3 -m venv --system-site-packages venv+
+    \begin{itemize}
+      \item This creates the director \verb+venv+ that contains files
+        related to the virtual environment.
+    \end{itemize}
+  \item \verb+source venv/bin/activate+
+  \item \verb+python -m pip install pandas scipy matplotlib+
+\end{enumerate}
+To exit from the virtual environment, execute the command
+\verb+deactivate+. \\
+\noindent
+The command \verb+source venv/bin/activate+ places you back
+into the virtual environment.
+
+\section*{Unpacking the code, directories, and running the tests}
+After downloading the tar ball, the installation is created by
+``unzipping'' and ``untarring'' it.
+The combined operation of unzipping and untarring will create a
+directory tree for which the top-level directory will have the name
+``\verb+nuSTORM-M.m.P+'', where ``\verb+M+'' is the major version
+number, ``\verb+m+'' is the minor version number, and ``\verb+P+'' is
+the patch number.
+
+In the top directory (\verb+nuSTORM-M.m.P+) you will find a
+``\verb+README.md+'' file which provides some orientation and
+instructions to run the code.
+In particular, a \verb+bash+ script ``\verb+startup.bash+'' is
+provided which:
+\begin{itemize}
+  \item Sets the ``\verb+nuSIMPATH+'' environment variable so that the
+    files that hold constants etc. required by the code can be
+    located; and
+  \item Adds ``\verb+01-Code+'' (see below) to the PYTHONPATH.
+    The scripts in "02-Tests" (see below) may then be run with the
+    command "python 02-Tests/<filename>.py".
+\end{itemize}
+Below the top directory, the directory structure in which the code is
+presented is:
+\begin{description}
+  \item\verb+01-Code+: contains the python implementation as a
+    series of modules.
+    Each module contains a single class or a related set of methods.
+  \item\verb+02-Tests+: contains self-contained test scripts that
+    run the various methods and simulation packages defined in the
+    code directory.
+  \item\verb+11-Parameters+: contains the parameter set used in
+    \verb+02-Tests/RunSimulation.py+ to generate muon decays in
+    the production straight.
+\end{description}
+The instruction in the \verb+README.md+ file should be followed to set
+up and run the code.
+  
+\section*{Making a contribution}
+nuSIM is archived in the git repository \verb+longkr/nuSTORM+.
+To clone the code using
+\verb+git clone+ you will need your own account on GitHub and
+permission to clone the code. 
+Instructions to request such permission is posted on the nuSTORM
+wiki.
