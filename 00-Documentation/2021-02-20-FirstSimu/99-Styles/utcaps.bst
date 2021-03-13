@@ -1,4 +1,4 @@
-% UT Physics bibliographic style, ver. 1.9. Based on:
+% UT Physics bibliographic style, ver. 2.8. Based on:
 %
 %X     IEEE Transactions bibliography style (29-Jan-88 version)
 %X       numeric labels, order-of-reference, IEEE abbreviations,
@@ -11,7 +11,8 @@
 %X       1/29/88	(OP&HWT) Updated for BibTeX version 0.99a, Oren Patashnik;
 %X       THIS `ieeetr' VERSION DOES NOT WORK WITH BIBTEX 0.98i.
 %
-%  Modifications: 1) added hypertex support and "archive" and "eprint" fields.
+%  Modifications: 1) added hypertex support and "archive", "eprint"
+%                    and "url" fields.
 %                 2) parentheses around dates, and no "pp." for article entries
 %                 3) "publisher, address" instead of "address: publisher"
 %                 4) added "report" field for article entries.
@@ -20,7 +21,7 @@
 %                    Jonathan Flynn' suggestion. SPIRES now supports this field.
 %                 7) Improved output of Proceedings entries
 %
-%    Modified by Jacques Distler, 6/05
+%    Modified by Jacques Distler, 12/18
 %           History: ver 1.0  9/96
 %                    ver 1.1 10/96 - added "collaboration" field
 %                    ver 1.2  7/97 - added a "\providecommand{\href}[2]{#2}"
@@ -36,12 +37,24 @@
 %                                    (Moral: test before you release.)
 %                    ver 1.7 10/99 - "et.~al." should be "et al." Morons!
 %                    ver 1.8 11/99 - Changed the Web URL to the more portable
-%                                    arXiv.org. The "archive" field functions as
+%                                    arxiv.org. The "archive" field functions as
 %                                    a true base-URL. This is NOT A
 %                                    BACKWARDS-COMPATIBLE change!
 %                   ver 1.8a 12/99 - MACROs for arXiv and cogprints
 %                                    BaseURL's defined.
 %                   ver 1.9   6/05 - eprint support for other entry types
+%                   ver 2.0   4/08 - support "new-style" eprint identifiers
+%                   ver 2.1   4/08 - support for "url" field
+%                   ver 2.2   4/08 - support for "doi" field
+%                   ver 2.3   8/09 - fix month formatting
+%                   ver 2.4   7/10 - remove some deprecated font-constructws.
+%                                    fix journal number formatting.
+%                   ver 2.5   9/10 - Internationalization and some more journal
+%                                    MACROs (thanks to Mateus Araujo)
+%                   ver 2.7   8/11 - Fix "et~al." in format.crossref.editor, too.
+%                                    (Reported by Blake Stacey)
+%                   ver 2.8  12/18 - Fix format.title and format.title.p for when the
+%                                    title contains trailing punctuation.
 %
 % HyperTeX Wizardry:
 %
@@ -51,17 +64,97 @@
 % and
 %   eprint   = "hep-th/9605023"
 % both produce 
-%    \href{http://arXiv.org/abs/hep-th/9605023}{{\tt hep-th/9605023}}
+%
+%    \href{http://arxiv.org/abs/hep-th/9605023}{{\ttfamily hep-th/9605023}}
+%
 % in the bibliographic output at the appropriate point. More generally,
 % if the archive field is present, we produce a URL of the form
 % "archive/eprint" as the first argument of the \href. If absent, the base
-% URL defaults to "http://arXiv.org/abs"
+% URL defaults to "http://arxiv.org/abs"
 % If you are using a hypertex macropackage, like hyperref.sty, this command
 % will create a link to the eprint at Los Alamos (or wherever).
+%
+% "New-style" arXiv identifiers are also supported.
+%
+%     archivePrefix = "arXiv",
+%     eprint    = "0707.3168",
+%     primaryClass = "hep-th",
+%
+% produces
+%
+%     \href{http://arxiv.org/abs/0707.3168}{{\ttfamily arXiv:0707.3168 [hep-th]}}
+%
+% Another (non-arXiv) example:
+%
+%     archive = "http://cogprints.org",
+%     eprint = "5542",
+%     archivePrefix = "Cogprints",
+%
+%  produces
+%
+%     \href{http://cogprints.org/5542}{{\ttfamily Cogprints:5542}}  
+%
+%  If a
+%
+%       doi = "10.xxxx"
+%
+%  field is present, then the journal reference becomes a
+%  clickable hyperlink to the online journal version of the paper.
 %
 % The bibtex output produced by SPIRES, while far from perfect, is pretty
 % suitable for use with this style. Indeed, this style was designed with
 % SPIRES in mind.
+
+FUNCTION {string.and} {" and "}
+FUNCTION {string.editors} {", eds."}
+FUNCTION {string.editor} {", ed."}
+FUNCTION {string.edition} {"~ed."}
+FUNCTION {string.volume} {"vol.~"}
+FUNCTION {string.capsvolume} {"Vol.~"}
+FUNCTION {string.of} {" of "}
+FUNCTION {string.number} {"no.~"}
+FUNCTION {string.capsnumber} {"No.~"}
+FUNCTION {string.in} {"in "}
+FUNCTION {string.spacein} {" in "}
+FUNCTION {string.capsin} {"In "}
+FUNCTION {string.multipages} {"pp.~"}
+FUNCTION {string.pages} {"p.~"}
+FUNCTION {string.chapter} {"ch.~"}
+FUNCTION {string.techrep} {"Tech. Rep."}
+FUNCTION {string.mastersthesis} {"Master's thesis"}
+FUNCTION {string.phdthesis} {"PhD thesis"}
+
+MACRO {jan} {"Jan."}
+MACRO {feb} {"Feb."}
+MACRO {mar} {"Mar."}
+MACRO {apr} {"Apr."}
+MACRO {may} {"May"}
+MACRO {jun} {"June"}
+MACRO {jul} {"July"}
+MACRO {aug} {"Aug."}
+MACRO {sep} {"Sept."}
+MACRO {oct} {"Oct."}
+MACRO {nov} {"Nov."}
+MACRO {dec} {"Dec."}
+MACRO {am} {"Acta Math."}
+MACRO {amj} {"Am. J. Phys."}
+MACRO {ap} {"Ann. Phys."}
+MACRO {cmp} {"Comm. Math. Phys."}
+MACRO {ijmp} {"Int. Jour. Mod. Phys."}
+MACRO {mpl} {"Mod. Phys. Lett."}
+MACRO {njp} {"New J. Phys"}
+MACRO {nup} {"Nucl. Phys."}
+MACRO {pl} {"Phys. Lett."}
+MACRO {pla} {"Phys. Lett. A"}
+MACRO {pr} {"Phys. Rev."}
+MACRO {pra} {"Phys. Rev. A"}
+MACRO {prl} {"Phys. Rev. Lett."}
+MACRO {repmp} {"Rep. Math. Phys"}
+MACRO {rmp} {"Rev. Mod. Phys."}
+
+MACRO {arXiv}     {"http://arxiv.org/abs"}
+MACRO {cogprints} {"http://cogprints.org"}
+MACRO {pubmed}    {"http://www.ncbi.nlm.nih.gov/pubmed"}
 
 ENTRY
   { address
@@ -91,6 +184,10 @@ ENTRY
     report
     collaboration
     SLACcitation
+    archivePrefix
+    primaryClass
+    url
+    doi
   }
   {}
   { label }
@@ -256,6 +353,9 @@ FUNCTION {emphasize}
   if$
 }
 
+FUNCTION {capitalize}
+{ "u" change.case$ "t" change.case$ }
+
 INTEGERS { nameptr namesleft numnames }
 
 FUNCTION {format.names}
@@ -273,8 +373,8 @@ FUNCTION {format.names}
 		'skip$
 	      if$
 	      t "others" =
-		{ " {\em et al.}" * }
-		{ " and " * t * }
+		{ " {\em et~al.}" * }
+		{ string.and * t * }
 	      if$
 	    }
 	  if$
@@ -294,17 +394,53 @@ FUNCTION {format.authors}
   if$
 }
 
+FUNCTION {format.archive}
+{
+  archivePrefix empty$
+      { "" }
+      { archivePrefix ":" *}
+  if$            
+}
+
+FUNCTION {format.primaryClass}
+{
+  primaryClass empty$
+      { "" }
+      { " [" primaryClass * "]" *}
+  if$            
+}
+
 FUNCTION {format.eprint}
 { eprint empty$
      { ""}
      { archive empty$
-          {"\href{http://arXiv.org/abs/" eprint * "}" * 
-             "{{\tt " * eprint * "}}" *}
+          {"\href{http://arxiv.org/abs/" eprint * "}" * 
+             "{{\ttfamily " * format.archive * eprint *
+              format.primaryClass * "}}" *}
           {"\href{" archive *  "/" * eprint * "}" * 
-             "{{\tt " * eprint * "}}" *}
+             "{{\ttfamily " * format.archive * eprint *
+              format.primaryClass * "}}" *}
        if$
      }
      if$
+}
+
+FUNCTION {format.url}
+{ url empty$
+    { "" }
+    {"\url{" url * "}" *}
+  if$
+}
+
+FUNCTION {add.doi}
+{ duplicate$ empty$
+    { skip$ }
+    { doi empty$
+        {}
+        {"\href{http://dx.doi.org/" doi * "}{" * swap$ * "}" *}
+      if$
+    }
+  if$
 }
 
 FUNCTION {format.report}
@@ -314,15 +450,21 @@ FUNCTION {format.report}
      if$
 }
 
-
+FUNCTION {format.howpublished}
+{ howpublished empty$
+    { "" }
+    { howpublished capitalize
+    }
+  if$
+}
 
 FUNCTION {format.editors}
 { editor empty$
     { "" }
     { editor format.names
       editor num.names$ #1 >
-	{ ", eds." * }
-	{ ", ed." * }
+	{ string.editors * }
+	{ string.editor * }
       if$
     }
   if$
@@ -331,14 +473,20 @@ FUNCTION {format.editors}
 FUNCTION {format.title}
 { title empty$
     { "" }
-    { "``" title * ",''" * }
+    {title title text.length$ #1 substring$ duplicate$ duplicate$ "?" =
+     swap$ "!" = or
+     swap$ "." = or
+      { "``" title * "''" * }
+      { "``" title * ",''" * }
+    if$
+   }
   if$
 }
 
 FUNCTION {format.title.p}
 { title empty$
     { "" }
-    { "``" title * ".''" * }
+    { "``" title * add.period$ "''" * }
   if$
 }
 
@@ -378,7 +526,7 @@ FUNCTION {format.date}
     }
     { month empty$
 	'year
-	{ month ", " * year * }
+	{ month capitalize ", " * year * }
       if$
     }
   if$
@@ -394,8 +542,8 @@ FUNCTION {format.date.paren}
       if$
     }
     { month empty$
-	{"(" year * ")" *}
-	{"(" month * ", " * year * ")" *}
+	{"(" year * ") " *}
+	{"(" month capitalize * ", " * year * ") " *}
       if$
     }
   if$
@@ -404,7 +552,7 @@ FUNCTION {format.date.paren}
 FUNCTION {format.collaboration}
 { collaboration empty$
     { "" }
-    { "{\bf " collaboration * "} " * "Collaboration" * }
+    { "{\bfseries " collaboration * "} " * "Collaboration" * }
   if$
 }
 
@@ -437,10 +585,10 @@ FUNCTION {either.or.check}
 FUNCTION {format.bvolume}
 { volume empty$
     { "" }
-    { "vol.~" volume *
+    { string.volume volume *
       series empty$
 	'skip$
-	{ " of " * series emphasize * }
+	{ string.of * series emphasize * }
       if$
       "volume and number" number either.or.check
     }
@@ -452,13 +600,13 @@ FUNCTION {format.number.series}
     { number empty$
 	{ series field.or.null }
 	{ output.state mid.sentence =
-	    { "no.~" }
-	    { "No.~" }
+	    { string.number }
+	    { string.capsnumber }
 	  if$
 	  number *
 	  series empty$
 	    { "there's a number but no series in " cite$ * warning$ }
-	    { " in " * series * }
+	    { string.spacein * series * }
 	  if$
 	}
       if$
@@ -470,7 +618,7 @@ FUNCTION {format.number.series}
 FUNCTION {format.edition}
 { edition empty$
     { "" }
-    { edition "l" change.case$ "~ed." * }
+    { edition "l" change.case$ string.edition * }
   if$
 }
 
@@ -500,8 +648,8 @@ FUNCTION {format.pages}
 { pages empty$
     { "" }
     { pages multi.page.check
-	{ "pp.~" pages n.dashify * }
-	{ "p.~" pages * }
+	{ string.multipages pages n.dashify * }
+	{ string.pages pages * }
       if$
     }
   if$
@@ -509,7 +657,9 @@ FUNCTION {format.pages}
 
 FUNCTION {format.pages.nopp}
 { pages empty$
-    { "" }
+    { "empty pages in " cite$ * warning$
+      ""
+    }
     { pages multi.page.check
 	{ pages n.dashify  }
 	{ pages }
@@ -522,14 +672,14 @@ FUNCTION {format.pages.nopp}
 FUNCTION {format.volume}
 { volume empty$
     { "" }
-    { "{\bf " volume * "}" * }
+    { "{\bfseries " volume * "} " * }
   if$
 }
 
 FUNCTION {format.number}
 { number empty$
     { "" }
-    { "no.~" number * "," *}
+    { "no.~" number * ", " *}
   if$
 }
 
@@ -537,7 +687,7 @@ FUNCTION {format.chapter.pages}
 { chapter empty$
     'format.pages
     { type empty$
-	{ "ch.~" chapter * }
+	{ string.chapter chapter * }
 	{ type "l" change.case$ chapter tie.or.space.connect }
       if$
       pages empty$
@@ -551,7 +701,7 @@ FUNCTION {format.chapter.pages}
 FUNCTION {format.in.ed.booktitle}
 { booktitle empty$
     { "" }
-    { "in " booktitle emphasize *
+    { string.in booktitle emphasize *
       editor empty$
 	'skip$
 	{ ", " * format.editors *  }
@@ -583,7 +733,7 @@ FUNCTION {empty.misc.check}
 
 FUNCTION {format.tr.number}
 { type empty$
-    { "Tech. Rep." }
+    { string.techrep }
     'type
   if$
   number empty$
@@ -606,10 +756,10 @@ FUNCTION {format.article.crossref}
 	  warning$
 	  ""
 	}
-	{ "in {\em " journal * "\/}" * }
+	{ string.in "{\em " * journal * "\/}" * }
       if$
     }
-    { "in " key * }
+    { string.in key * }
   if$
   " \cite{" * crossref * "}" *
 }
@@ -618,12 +768,12 @@ FUNCTION {format.crossref.editor}
 { editor #1 "{vv~}{ll}" format.name$
   editor num.names$ duplicate$
   #2 >
-    { pop$ " {\em et.~al.}" * }
+    { pop$ " {\em et~al.}" * }
     { #2 <
 	'skip$
 	{ editor #2 "{ff }{vv }{ll}{ jj}" format.name$ "others" =
-	    { " {\em et.~al.}" * }
-	    { " and " * editor #2 "{vv~}{ll}" format.name$ * }
+	    { " {\em et~al.}" * }
+	    { string.and * editor #2 "{vv~}{ll}" format.name$ * }
 	  if$
 	}
       if$
@@ -634,10 +784,10 @@ FUNCTION {format.crossref.editor}
 FUNCTION {format.book.crossref}
 { volume empty$
     { "empty volume in " cite$ * "'s crossref of " * crossref * warning$
-      "In "
+      string.capsin
     }
-    { "Vol.~" volume *
-      " of " *
+    { string.capsvolume volume *
+      string.of *
     }
   if$
   editor empty$
@@ -670,15 +820,27 @@ FUNCTION {format.incoll.inproc.crossref}
 	      crossref * warning$
 	      ""
 	    }
-	    { "in {\em " booktitle * "\/}" * }
+	    { string.in "{\em " * booktitle * "\/}" * }
 	  if$
 	}
-	{ "in " key * }
+	{ string.in key * }
       if$
     }
-    { "in " format.crossref.editor * }
+    { string.in format.crossref.editor * }
   if$
   " \cite{" * crossref * "}" *
+}
+
+FUNCTION {format.journal}
+{ journal missing$   
+    { "" }
+    {journal emphasize " " *
+     format.volume *
+     format.number *
+     format.date.paren *
+     format.pages.nopp *
+      }
+    if$
 }
 
 FUNCTION {article}
@@ -689,30 +851,21 @@ FUNCTION {article}
   blank.sep
   crossref missing$
   { journal missing$   
-    {}
-    { journal emphasize "journal" output.check
-       blank.sep
-      format.volume output
-      blank.sep
-      format.date.paren "year"  output.check
-      month empty$
-	        { format.number output }
-	        'skip$
-         if$
-      blank.sep
-      format.pages.nopp output
-      }
-      if$
-      report missing$
-            {format.eprint output}
-            {blank.sep format.report output format.eprint output}
-            if$
+        {}
+        { format.journal add.doi "journal" output.check}
+     if$
+     report missing$
+        {format.eprint output}
+        {blank.sep format.report output format.eprint output}
+       if$
     }
     { format.article.crossref output.nonnull
       format.pages output
       format.eprint output
     }
   if$
+  new.sentence
+  format.url output
   new.sentence
   note output
   new.sentence
@@ -732,7 +885,7 @@ FUNCTION {book}
       if$
     }
   if$
-  format.btitle "title" output.check
+  format.btitle add.doi "title" output.check
   crossref missing$
     { format.bvolume output
       new.block
@@ -749,6 +902,8 @@ FUNCTION {book}
   format.date "year" output.check
   new.block
   format.eprint output
+  new.block
+  format.url output
   new.block
   note output
   new.sentence
@@ -773,11 +928,13 @@ FUNCTION {booklet}
       blank.sep
     }
   if$
-  howpublished output
+  format.howpublished output
   address output
   format.date output
   new.block
   format.eprint output
+  new.block
+  format.url output
   new.block
   note output
   new.sentence
@@ -800,14 +957,14 @@ FUNCTION {inbook}
   format.btitle "title" output.check
   crossref missing$
     { format.bvolume output
-      format.chapter.pages "chapter and pages" output.check
+      format.chapter.pages add.doi "chapter and pages" output.check
       new.block
       format.number.series output
       new.block
       publisher "publisher" output.check
       address output
     }
-    { format.chapter.pages "chapter and pages" output.check
+    { format.chapter.pages add.doi "chapter and pages" output.check
       new.block
       format.book.crossref output.nonnull
     }
@@ -816,6 +973,8 @@ FUNCTION {inbook}
   format.date "year" output.check
   new.block
   format.eprint output
+  new.block
+  format.url output
   new.block
   note output
   new.sentence
@@ -827,7 +986,7 @@ FUNCTION {incollection}
 { output.bibitem
   format.collaboration output
   format.authors "author" output.check
-  format.title "title" output.check
+  format.title add.doi "title" output.check
   blank.sep
   crossref missing$
     { format.in.ed.booktitle "booktitle" output.check
@@ -847,6 +1006,8 @@ FUNCTION {incollection}
   new.block
   format.eprint output
   new.block
+  format.url output
+  new.block
   note output
   new.sentence
   format.SLACcitation output
@@ -857,7 +1018,7 @@ FUNCTION {inproceedings}
 { output.bibitem
   format.collaboration output
   format.authors "author" output.check
-  format.title "title" output.check
+  format.title add.doi "title" output.check
   blank.sep
   crossref missing$
     { format.in.ed.booktitle "booktitle" output.check
@@ -876,6 +1037,8 @@ FUNCTION {inproceedings}
   if$
   new.block
   format.eprint output
+  new.block
+  format.url output
   new.block
   note output
   new.sentence
@@ -917,6 +1080,8 @@ FUNCTION {manual}
   new.block
   format.eprint output
   new.block
+  format.url output
+  new.block
   note output
   fin.entry
 }
@@ -924,12 +1089,14 @@ FUNCTION {manual}
 FUNCTION {mastersthesis}
 { output.bibitem
   format.authors "author" output.check
-  format.title "title" output.check
+  format.title add.doi "title" output.check
   blank.sep
-  "Master's thesis" format.thesis.type output.nonnull
+  string.mastersthesis format.thesis.type output.nonnull
   school "school" output.check
   address output
   format.date "year" output.check
+  new.block
+  format.url output
   new.block
   note output
   fin.entry
@@ -950,10 +1117,13 @@ FUNCTION {misc}
       blank.sep
     }
   if$
-  howpublished output
+  format.howpublished output
   format.date output
   new.block
+  format.url output
+  new.sentence
   note output
+  new.sentence
   fin.entry
   empty.misc.check
 }
@@ -961,14 +1131,16 @@ FUNCTION {misc}
 FUNCTION {phdthesis}
 { output.bibitem
   format.authors "author" output.check
-  format.btitle "title" output.check
+  format.btitle add.doi "title" output.check
   new.block
-  "PhD thesis" format.thesis.type output.nonnull
+  string.phdthesis format.thesis.type output.nonnull
   school "school" output.check
   address output
   format.date "year" output.check
   new.block
   format.eprint output
+  new.block
+  format.url output
   new.block
   note output
   new.sentence
@@ -982,7 +1154,7 @@ FUNCTION {proceedings}
     { organization output }
     { format.editors output.nonnull }
   if$
-  format.btitle "title" output.check
+  format.btitle add.doi "title" output.check
   format.bvolume output
   format.number.series output
   editor empty$
@@ -996,6 +1168,8 @@ FUNCTION {proceedings}
   new.block
   format.eprint output
   new.block
+  format.url output
+  new.block
   note output
   new.sentence
   format.SLACcitation output
@@ -1006,7 +1180,7 @@ FUNCTION {techreport}
 { output.bibitem
   format.collaboration output
   format.authors "author" output.check
-  format.title "title" output.check
+  format.title add.doi "title" output.check
   blank.sep
   format.tr.number output.nonnull
   institution "institution" output.check
@@ -1014,6 +1188,8 @@ FUNCTION {techreport}
   format.date "year" output.check
   new.block
   format.eprint output
+  new.block
+  format.url output
   new.block
   note output
   fin.entry
@@ -1033,49 +1209,6 @@ FUNCTION {unpublished}
 }
 
 FUNCTION {default.type} { misc }
-
-MACRO {jan} {"Jan."}
-
-MACRO {feb} {"Feb."}
-
-MACRO {mar} {"Mar."}
-
-MACRO {apr} {"Apr."}
-
-MACRO {may} {"May"}
-
-MACRO {jun} {"June"}
-
-MACRO {jul} {"July"}
-
-MACRO {aug} {"Aug."}
-
-MACRO {sep} {"Sept."}
-
-MACRO {oct} {"Oct."}
-
-MACRO {nov} {"Nov."}
-
-MACRO {dec} {"Dec."}
-
-MACRO {nup} {"Nucl. Phys."}
-
-MACRO {cmp} {"Comm. Math. Phys."}
-
-MACRO {prl} {"Phys. Rev. Lett."}
-
-MACRO {pl} {"Phys. Lett."}
-
-MACRO {rmp} {"Rev. Mod. Phys."}
-
-MACRO {ijmp} {"Int. Jour. Mod. Phys."}
-
-MACRO {mpl} {"Mod. Phys. Lett."}
-
-MACRO {pr} {"Phys. Rev."}
-
-MACRO {arXiv}     {"http://arXiv.org/abs"}
-MACRO {cogprints} {"http://cogprints.soton.ac.uk/abs"}
 
 READ
 
