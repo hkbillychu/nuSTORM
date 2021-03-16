@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{wrapfig}
+\usepackage{floatflt}
+
+\usepackage[top=1cm,bottom=1.5cm,left=1.5cm,right=1.5cm]{geometry}
+\newcommand{\nl}{\hfill\newline}
+\newcommand{\runList}{ \noindent \begin{tabular}{|  l | r | c | p{12.0cm} | } \hline Run  & Events   &  E GeV &   Description\\  \hline }
+\newcommand{\run}[4]{ {#1}  & {#2}  & {#3} & {#4} \\}
+\newcommand{\runListEnd} { \hline \end{tabular}  \nl}
+
+\begin{document}
+\title{nuSim run Conditions}
+\author{}
+\maketitle
+
+% stop indentation - not sure if this is what In actually want for everything
+ \setlength{\parindent}{0pt}
+
+
+\section{Runs}
+
+\runList
+\run {0010}{20000}{6}{BM1: $E_{beam}$ parabolic  $\pm 15 \%$, $\beta$ is $\pi$, emittance is 25000}
+\hline
+\run {0011}{20000}{4}{BM1: $E_{beam}$ parabolic  $\pm 15 \%$, $\beta$ is  $\pi$, emittance is 25000}
+\hline
+\run {0012}{20000}{2}{BM1: $E_{beam}$ parabolic  $\pm 15 \%$, $\beta$ is  $\pi$, emittance is 25000}
+\runListEnd
+
+
+\section{Beam Models}
+\subsection{Beam Model 1 (BM1)}
+
+Production straight 180m\hfill\nl
+Transverse acceptance 1 $\pi$ mm rad \hfill\nl
+Transverse $\beta$ function 25000 mm; taken as representative of the production straight\nl
+Emittance (acceptance) and $\beta$ are momentum independent at zeroth order.\nl
+The Energy is parabolic $\pm 15 \%$ around the mean.
+Muons decay down the straight with the correct ($\beta$ corrected) lifetime. Muons are not tracked
+beyond the end of the production straight, they are bent away and disappear.
+
+Flux of the neutrinos is measured at a plane 50m beyond the end of the production straight
+
+
+\end{document}
+
+
+
+
+
