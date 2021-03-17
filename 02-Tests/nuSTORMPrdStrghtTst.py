@@ -23,8 +23,8 @@ print("========  nuSTORMPrdStrght: tests start  ========")
 nuSTORMPrdStrghtTest = 1
 print()
 print("nuSTORMPrdStrghtTest:", nuSTORMPrdStrghtTest, " check if class is a singleton.")
-nuPrdStrt  = nuStrt.nuSTORMPrdStrght('11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
-nuPrdStrt1 = nuStrt.nuSTORMPrdStrght('11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+nuPrdStrt  = nuStrt.nuSTORMPrdStrght('nuSIMPATH/11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+nuPrdStrt1 = nuStrt.nuSTORMPrdStrght('nuSIMPATH/11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
 print("    nuPrdStrt singleton test:", id(nuPrdStrt), id(nuPrdStrt1), id(nuPrdStrt)-id(nuPrdStrt1))
 if nuPrdStrt != nuPrdStrt1:
     raise Exception("nuSTORMPrdStrght is not a singleton class!")

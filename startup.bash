@@ -1,12 +1,18 @@
 #!/bin/bash
 
 stm=$(PWD)
-echo $stm
+#echo $stm
 add="/01-Code"
-echo $add
+#echo $add
 dir="$stm$add"
-echo $dir
+#echo $dir
 
+echo "Set nuSIM path:"
+nuSIMPATH="$dir"
+echo "    " $nuSIMPATH
+export nuSIMPATH
+
+echo "Set PYTHON path:"
 PYTHONPATH="${PYTHONPATH}:$dir"
-echo $PYTHONPATH
+echo "    " $PYTHONPATH
 export PYTHONPATH

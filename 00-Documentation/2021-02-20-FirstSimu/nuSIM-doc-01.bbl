@@ -1,0 +1,13 @@
+\providecommand{\href}[2]{#2}\begingroup\raggedright\begin{thebibliography}{1}
+
+\bibitem{Ahdida:2654649}
+C.~Ahdida, R.~Appleby, W.~Bartmann, J.~Bauche, M.~Calviani, J.~Gall,
+  S.~Gilardoni, B.~Goddard, C.~Hessler, P.~Huber, I.~Efthymiopoulos,
+  J.~Lagrange, M.~Lamont, K.~Long, J.~Osborne, J.~Pasternak, F.~Soler,
+  S.~Tygier, and F.~Velotti,
+  \href{http://dx.doi.org/10.17181/CERN.FQTB.O8QN}{``{nuSTORM at CERN:
+  Feasibility Study},''} Tech. Rep. CERN-PBC-REPORT-2019-003, CERN, Geneva,
+  Oct, 2020.
+\newblock \url{http://cds.cern.ch/record/2654649}.
+
+\end{thebibliography}\endgroup
