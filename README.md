@@ -1,7 +1,7 @@
 # nuSTORM
 
 ## To set up and run:
- * Execute "startup.bash" from this directory.  This will:
+ * Execute "startup.bash" from this directory (i.e. run the bash command "source startup.bash").  This will:
   * Set up "nuSIMPATH"; and
   * Add "01-Code" to the PYTHONPATH.  The scripts in "02-Tests" may then be run with the command "python 02-Tests/<filename>.py".
 
