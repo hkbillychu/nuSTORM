@@ -6,8 +6,12 @@ Class plane:
 
   Models a plane downstream from the nuStorm production straight
 
-  Version: 2.0                                  Date:25 February 2020
+  Version: 2.2                                  Date:11 March 2021
   Author: Paul Kyberd
+
+  Version 2.3   Production straight and flux plane from data file
+
+  Version 2.2   Length of production straight past into constructor
 
   Version 2.1   remove the electron from consideration and do both neutrinos
 
@@ -21,7 +25,6 @@ Class plane:
 >>>>> this to modify 
   Class attributes:
   -----------------
-  __MuonDecay: muon decay class
   --np       : numpy class
       
   Instance attributes:
@@ -37,13 +40,10 @@ Class plane:
       __str__  : Dump of values of the plane
 
   Get/set methods:
-    getzPos           : Returns the distance of the plane downstream of the straight
+    
   
   General methods:
-    findHitPosition      : finds (and stores?) the hit position of a particle with the plane
-
-  Shortcomings: the decay position has x=y=0, so it is assumed here
-                the length of the decay straight is put in by hand - not sure how to sort this out
+    findHitPosition      : finds and stores the hit position of a particle with the plane
 
 """
 
@@ -51,6 +51,8 @@ from copy import deepcopy
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+import nuSTORMPrdStrght as nuStrt
 
     
 class plane:
@@ -59,38 +61,20 @@ class plane:
 
 
 #--------  "Built-in methods":
-    def __init__(self, zPos=50.):
+    def __init__(self, straightLength, planePosition):
 
-        self.zPos = zPos
-        self.R=[]
-        self.Energy=[]
-        self.RLowCut = 0.0
-        self.RHighCut = 5.0
-
-#        self._TrcSpcCrd, self._P_e, self._P_nue, self._P_numu, self._RestFrame = self.CreateNeutrinos()
-        
+        self.zPos = planePosition + straightLength
         return
 
     def __repr__(self):
         return "plane(zPos, particleSpecies)\n"\
-        "          z is distance downstream of the end of the nuStorm Straight\n" \
+        "          z is distance downstream of the start of the nuStorm Straight\n" \
         "          Particle Species is corresponding particle for the plane "
 
 
     def __str__(self):
         return "plane : z(m) = %g \r\n" \
                 % (self.zPos)
-    
-    def addHitPosition(self, hit):
-
-        self.R.append(hit[2])
-        return
-
-    def addHitE(self,hit):
-
-        if hit[2] > self.RLowCut and hit[2] < self.RHighCut:
-            self.Energy.append(hit[4])
-        return
 
 # Find the intercept of the particle with plane and store it along with the energy
     def findHitPosition(self, nuEvt):
@@ -106,14 +90,16 @@ class plane:
         pMu = nuEvt.getnumu4mmtm()[1]
 
 #  Distance to the plane
-        deltaZ = self.zPos + 180.0 - DecayPntZ
+        deltaZ = self.zPos - DecayPntZ
         if self.__Debug: print ("path length is ", deltaZ)
 #  Position of the nue hit               # need to check by hand - no test
+
         hitE=[]
         xPnt = (DecayPntX + pE[0]*deltaZ/pE[2])
         yPnt = (DecayPntY + pE[1]*deltaZ/pE[2])
         hitE.append(xPnt)                                 # x
         hitE.append(yPnt)                                 # y
+        hitE.append(self.zPos)                            # z
         hitE.append(np.sqrt(xPnt*xPnt + yPnt*yPnt))       # R
         hitE.append(math.atan2(yPnt, xPnt))               # phi
         hitE.append(pE[0])                               # px
@@ -129,6 +115,7 @@ class plane:
         yPnt = (DecayPntY + pMu[1]*deltaZ/pMu[2])
         hitMu.append(xPnt)                                 # x
         hitMu.append(yPnt)                                 # y
+        hitMu.append(self.zPos)                            # z
         hitMu.append(np.sqrt(xPnt*xPnt + yPnt*yPnt))       # R
         hitMu.append(math.atan2(yPnt, xPnt))               # phi
         hitMu.append(pMu[0])                               # px
@@ -140,26 +127,3 @@ class plane:
         if self.__Debug: print (" hit: x, y, R, phi, E ", hitMu[0], " ", hitMu[1], " ", hitMu[2], " ", hitMu[3], " ", hitMu[4])
 
         return hitE, hitMu
-
-#.. Trace space coordinate generation:
-    def getlongipos(self, Dcy):
-        Pmu = self.getpmu()
-        Emu = np.sqrt(Pmu**2 + \
-                                              NeutrinoEventInstance.__mumass**2)
-        v   = Pmu / Emu * NeutrinoEventInstance.__sol
-
-        s   = v * Dcy.getLifetime()
-        z   = s                      #.. limitation: muon trajectory along x=y=0
-        
-        return s, z
-
-
-#--------  get/set methods:
-    def getzPos(self):
-        return self.zPos
-
-    def getpmu(self):
-        return deepcopy(self._pmu)
-
-    def getTraceSpaceCoord(self):
-        return deepcopy(self._TrcSpcCrd)

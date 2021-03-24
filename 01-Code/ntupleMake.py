@@ -221,16 +221,16 @@ class ntupleMake:
 
 		self.flux.nuEx = hitE[0]
 		self.flux.nuEy = hitE[1]
-		self.flux.nuEpx = hitE[4]
-		self.flux.nuEpy = hitE[5]
-		self.flux.nuEpz = hitE[6]
-		self.flux.nuEE = hitE[7]
+		self.flux.nuEpx = hitE[5]
+		self.flux.nuEpy = hitE[6]
+		self.flux.nuEpz = hitE[7]
+		self.flux.nuEE = hitE[8]
 		self.flux.nuMux = hitMu[0]
 		self.flux.nuMuy = hitMu[1]
-		self.flux.nuMupx = hitMu[4]
-		self.flux.nuMupy = hitMu[5]
-		self.flux.nuMupz = hitMu[6]
-		self.flux.nuMuE = hitMu[7]
+		self.flux.nuMupx = hitMu[5]
+		self.flux.nuMupy = hitMu[6]
+		self.flux.nuMupz = hitMu[7]
+		self.flux.nuMuE = hitMu[8]
 
 		self.fluxTree.Fill()
 
