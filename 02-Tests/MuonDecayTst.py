@@ -51,7 +51,7 @@ MuonDecayTest = 3
 print()
 print("MuonDecayTest:", MuonDecayTest, " Create many decays.")
 Dcy = []
-for i in range(10000):
+for i in range(100000):
     Dcy.append(md.MuonDecay())
 for i in range(5):
     print(Dcy[i])
