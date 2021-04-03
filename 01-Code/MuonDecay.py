@@ -30,12 +30,14 @@ Class MuonDecay:
   Methods:
   --------
   Built-in methods __new__, __repr__ and __str__.
-      __init__ : Creates decay instance
+      __init__ : Creates decay instance:
+                 Optional keyword argument Tmax -- cut off lifetime at Tmax
       __repr__ : One liner with call.
       __str__  : Dump of values of decay
 
   Get/set methods:
     getLifetime: Returns lifetime (s) of this decay instance
+                 Optional keyword argument Tmax -- cut off lifetime at Tmax
     get4ve     : Returns 4-vector of electron (MeV)
     get4vnue   : Returns 4-vector of electron neutrino (MeV)
     get4vnumu  : Returns 4-vector of muon neutrino (MeV)
@@ -63,14 +65,13 @@ Class MuonDecay:
 
 Created on Sat 09Jan21;17:18: Version history:
 ----------------------------------------------
+ 1.1: 03Apr21: Optional (keyword) argument to limit generation to Tmax
  1.0: 09Jan21: First implementation
 
 @author: kennethlong
 """
 
 from copy import deepcopy 
-#from Simulation import *
-#from Simulation import getRandom
 import Simulation as Simu
 import numpy as np
 import math as mth
@@ -83,9 +84,11 @@ class MuonDecay:
     __Debug = False
     
 #--------  "Built-in methods":
-    def __init__(self):
+    def __init__(self, **kwargs):
 
-        self._Lifetime = self.GenerateLifetime()
+        Tmax = kwargs.get('Tmax', float('inf'))
+
+        self._Lifetime = self.GenerateLifetime(Tmax=Tmax)
 
         v_e, v_nue, v_numu, costheta, cosphi = self.decaymuon()
 
@@ -112,8 +115,10 @@ class MuonDecay:
                      self._v_numu[0], self._v_numu[1][0], self._v_numu[1][1], self._v_numu[1][2])
 
 #--------  "Dynamic methods"; individual lifetime, energies, and angles
-    def GenerateLifetime(self):
-        ran = Simu.getRandom()
+    def GenerateLifetime(self, **kwargs):
+        Tmax = kwargs.get('Tmax', float('inf'))
+        Gmx = 1. - mth.exp( -Tmax / muCnst.lifetime() )
+        ran = Simu.getRandom() * Gmx
         lt = -mth.log(1.-ran) * muCnst.lifetime()
         return lt
 
