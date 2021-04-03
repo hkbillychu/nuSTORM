@@ -47,6 +47,7 @@ Class NeutrinoEventInstance:
 
 Created on Sat 16Jan21;02:26: Version history:
 ----------------------------------------------
+ 1.1: 03Apr21: Fix error in relativistic treatment muon lifetime
  1.0: 16Jan21: First implementation
 
 @author: kennethlong
@@ -101,9 +102,19 @@ class NeutrinoEventInstance:
         while z > PrdStrghtLngth:
             if isinstance(Dcy, MuonDecay.MuonDecay):
                 del Dcy
-            Dcy = MuonDecay.MuonDecay()
-            DcyCoord, pmuGen = self.GenerateDcyPhaseSpace(Dcy)
+            
+            Pmu0 = self.getpmu()
+            Pmu  = nuStrt.GenerateMmtm(Pmu0)
+            Emu   = np.sqrt(Pmu**2 + NeutrinoEventInstance.__mumass**2)
+            beta  = Pmu / Emu
+            gamma = Emu / NeutrinoEventInstance.__mumass
+            v    = beta * NeutrinoEventInstance.__sol
+            Tmax = nuStrt.ProdStrghtLen() / (gamma * v)
+
+            Dcy = MuonDecay.MuonDecay(Tmax=Tmax)
+            DcyCoord, pmuGen = self.GenerateDcyPhaseSpace(Dcy, Pmu)
             z = DcyCoord[3]
+
         if z > PrdStrghtLngth:
             print("NeutrinoEvenInstance.CreateNeutrinos Alarm:", z)
         if NeutrinoEventInstance.__Debug:
@@ -123,13 +134,9 @@ class NeutrinoEventInstance:
         return DcyCoord, pmuGen, P_e, P_nue, P_numu
 
 #.. Trace space coordinate generation: array(s, x, y, z, x', y')
-    def GenerateDcyPhaseSpace(self, Dcy):
+    def GenerateDcyPhaseSpace(self, Dcy, Pmu):
         coord = np.array([0., 0., 0., 0., 0., 0.])
 
-        #.. Get momentum:
-        Pmu0 = self.getpmu()
-        Pmu  = nuStrt.GenerateMmtm(Pmu0)
-        
         #.. longitudinal position, "s", z:
         coord[0] = self.GenerateLongiPos(Dcy, Pmu)
         coord[3] = nuStrt.Calculatez(coord[0])
@@ -144,10 +151,13 @@ class NeutrinoEventInstance:
 
 #.. Trace space coordinate generation:
     def GenerateLongiPos(self, Dcy, Pmu):
-        Emu = np.sqrt(Pmu**2 + NeutrinoEventInstance.__mumass**2)
-        v   = Pmu / Emu * NeutrinoEventInstance.__sol
+        Emu   = np.sqrt(Pmu**2 + NeutrinoEventInstance.__mumass**2)
+        beta  = Pmu / Emu
+        gamma = Emu / NeutrinoEventInstance.__mumass
+        
+        v    = beta * NeutrinoEventInstance.__sol
 
-        s   = v * Dcy.getLifetime()
+        s   = v * gamma * Dcy.getLifetime()
         
         return s
 
