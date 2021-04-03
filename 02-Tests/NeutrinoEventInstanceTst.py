@@ -10,6 +10,8 @@ Test script for "NeutrinoEventInstance" class
   large number of decays is executed.  Finally a set of reference plots
   are generated.
 
+ 03Apr21: Fix relativistic treatment of muon lifetime
+
 """
 
 import MuonConst as muCnst
@@ -17,6 +19,7 @@ import NeutrinoEventInstance as nuEvtInst
 import numpy as np
 import matplotlib.pyplot as plt
 import Simulation as Simu
+import math as mth
 
 mc = muCnst.MuonConst()
 
@@ -52,9 +55,11 @@ NeutrinoEventInstanceTest = 4
 print()
 print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, \
       "soak test.")
+Pmu = 5.
+print("    ----> Muon momentum:", Pmu)
 nuEI = []
-for i in range(6000):
-    nuEI.append(nuEvtInst.NeutrinoEventInstance(5.))
+for i in range(10000):
+    nuEI.append(nuEvtInst.NeutrinoEventInstance(Pmu))
 for i in range(5):
     print("    nuEI[i]:", nuEI[i])
 
@@ -96,7 +101,10 @@ plt.xlabel('s (m)')
 plt.ylabel('Entries')
 plt.title('s distribution')
 # add a 'best fit' line
-l = 1./(mc.lifetime      ()*mc.SoL())
+Emu   = mth.sqrt(Pmu**2 + (mc.mass()/1000.)**2)
+beta  = Pmu/Emu
+gamma = Emu/(mc.mass()/1000.)
+l = 1./(gamma*mc.lifetime()*beta*mc.SoL())
 y = n[0]*np.exp(-l*bins)
 plt.plot(bins, y, '-', color='b')
 plt.show()
