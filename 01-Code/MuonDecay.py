@@ -65,6 +65,9 @@ Class MuonDecay:
 
 Created on Sat 09Jan21;17:18: Version history:
 ----------------------------------------------
+ 1.2: 07Apr21: Update GenerateScldE to minimise calls to random-number
+               generatory.  Hope is that this version runs a little more
+               quickly.
  1.1: 03Apr21: Optional (keyword) argument to limit generation to Tmax
  1.0: 09Jan21: First implementation
 
@@ -128,27 +131,81 @@ class MuonDecay:
         f_e   = 0.
         while f_nue < (1. - f_e):
 #.. fractional electron energy:
-            f_e = Simu.getRandom()
-            
+            Ge    = Simu.getRandom()
+            Coefe = [0., 0., 0., 0., 0.]
+            Coefe[0] =  1.
+            Coefe[1] = -2.
+            Coefe[2] =  0.
+            Coefe[3] =  0.
+            Coefe[4] =  Ge
+            Rootse   = np.roots(Coefe)
+
+            Sln = 0
+            Rt  = -99
+            for r in Rootse:
+                if r.imag == 0.:
+                    if r >= 0. and r <= 1.:
+                        Sln += 1
+                        Rt   = r.real
+
+            if Sln !=1:
+                Err = ' Number of solutions for f_e = ' + str(Sln)
+                raise Exception(Err)
+            elif Rt == -99.:
+                Err = ' Number of solutions for f_e = ' + str(Sln) + " but Rt = " + str(Rt)
+                raise Exception(Err)
+            else:
+                f_e = Rt
+
 #.. fractional electron-neutrino energy:
+            Alpha   = (1. - f_e)**2 * (1. + 2.*f_e)
+            Gnue    = Simu.getRandom()
+            Coefnue    = [0., 0., 0., 0.]
+            Coefnue[0] =  2.
+            Coefnue[1] = -3.
+            Coefnue[2] =  0.
+            Coefnue[3] = Gnue * (1. - Alpha) + Alpha
+            Roots   = np.roots(Coefnue)
+
+            Sln = 0
+            Rt  = -99
+            for r in Roots:
+                if not isinstance(r, complex):
+                    if r >= 0. and r <= 1.:
+                        Sln += 1
+                        Rt   = r
+
+            if Sln !=1:
+                Err = ' Number of solutions for f_nue = ' + str(Sln)
+                raise Exception(Err)
+            elif Rt == -99.:
+                Err = ' Number of solutions for f_nue = ' + str(Sln) + " but Rt = " + str(Rt)
+                raise Exception(Err)
+            else:
+                f_nue = Rt
+            if (1.-f_e) > f_nue:
+                print(" (1.-f_e) > f_nue:", f_e, (1.-f_e), f_nue, (f_e + f_nue))
+            elif (f_e+f_nue) < 1.:
+                print(" (f_e+f_nue) < 1.:", f_e, (1.-f_e), f_nue, (f_e + f_nue))
+                        
+            """ Start old code
             gam = 1.
             x   = 1.
             while gam > x*(1.-x):
                 x   = Simu.getRandom()
                 gam = Simu.getRandom()
             f_nue = x
+            End old code """
 
         f_numu = 2. - f_e - f_nue
         
         return f_e, f_nue, f_numu
-
+    
     def get3vectors(self, f_e, f_nue, f_numu):
 #----  See P. 3, my "Notes and calcs"
-        #print("f_e, f_nue, f_numu:", f_e, f_nue, f_numu)
 #.. electron neutrino
         costheta = 1. - 2.*( 1./f_e + 1/f_nue - 1/(f_e*f_nue) )
         sintheta = mth.sqrt(1. - costheta**2)
-        #print("theta:", sintheta, costheta)
         
 #.. muon neutrino
         cosphi = -(f_e + f_nue*costheta) / f_numu
@@ -157,7 +214,6 @@ class MuonDecay:
 
         theta = mth.acos(costheta) * 180./mth.pi
         phi   = mth.acos(cosphi)   * 180./mth.pi
-        #print("phi:", sinphi, cosphi)
 
 #.. Three vectors:
         p_e    = np.array([             0., 0., f_e            ])
@@ -179,10 +235,6 @@ class MuonDecay:
         cgamma = mth.cos(gamma)
         sgamma = mth.sin(gamma)
 
-        #print("--------  --------  --------  --------  -------- ")
-        #print("p_e", p_e)
-        #print("p_nue", p_nue)
-        #print("p_numu", p_numu)
 
 #.. Rotation angles
         Ra = np.array([          \
@@ -190,32 +242,24 @@ class MuonDecay:
              [salpha   ,  calpha,      0.      ], \
              [0.       , 0.,      1.      ] \
                                    ])
-        #print("Ra:", Ra)
         Rb = np.array([          \
              [cbeta    , 0.,      -sbeta     ], \
              [0.       , 1.,      0.      ], \
              [sbeta    , 0.,      cbeta      ] \
                                    ])
-        #print("Rb:", Rb)
         Rc = np.array([          \
              [cgamma   , -sgamma,      0.      ], \
              [sgamma   ,  cgamma,      0.      ], \
              [0.       , 0.,      1.      ] \
                                    ])
-        #print("Rc:", Rc)
 
         Rr = np.dot(Ra, Rb)
-        #print("Rr:", Rr)
         Rr = np.dot(Rr, Rc)
-        #print("Rr:", Rr)
         
 #.. Do rotation:
         p_e1    = np.dot(Rr, p_e)
         p_nue1  = np.dot(Rr, p_nue)
         p_numu1 = np.dot(Rr, p_numu)
-        #print("p_e1", p_e1)
-        #print("p_nue1", p_nue1)
-        #print("p_numu1", p_numu1)
 
         return p_e1, p_nue1, p_numu1
 
