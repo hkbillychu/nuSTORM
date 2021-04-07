@@ -116,11 +116,13 @@ class Simulation(object):
         print('-----------------')
     # Define root output stream
         runNumber=9.0                   # set run number
-        nt = ntM.ntupleMake(runNumber, "nuStorm.root")
+ # Define ntupleMaker called with run number; output file name; production straight data
+        nt = ntM.ntupleMake(runNumber, self._nuStrt, "nuStorm.root")
         if (nt.Version != 2.6):
           raiseException("Incorrect version of ntupleMaker")
-    # Define the distance of the downstream plane where the flux is calculated
-        fluxPlane = plane.plane(50.0)
+# Define the distance of the downstream plane where the flux is calculated
+#  parameters length of straight; distance from end of straight of plane.
+        fluxPlane = plane.plane(self._nuStrt.ProdStrghtLen(), self._nuStrt.HallWallDist())
 
         iCnt = 0
         Scl  = 1

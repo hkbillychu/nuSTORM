@@ -130,11 +130,10 @@ class ntupleMake:
 	__muMass = muCnst.mass()/1000.
 
 # built-in methods
-	def __init__(self, runNum, outputFilename="nuStorm.root"):
-
+	def __init__(self, runNum, nuPrdStrt, outputFilename="nuStorm.root"):
+# first a TTree with the run information - written once
 		self.outputFilename = outputFilename
 		self.outfile = TFile( self.outputFilename, 'RECREATE', 'ROOT file with an NTuple' )
-
 # first a TTree with the run information - written once
 		self.runInfo = ROOT.information()
 		self.infoTree = TTree('runInfo', 'run information')
@@ -149,12 +148,12 @@ class ntupleMake:
 # Parameters for the flux plane
 		self.runInfo.PWidth = 10.0
 		self.runInfo.PHeight = 10.0
-		self.runInfo.PZ = 50.0
+		self.runInfo.PZ = nuPrdStrt.HallWallDist()
 # Parameters for the detector box
-		self.runInfo.DBWidth = 20.0
-		self.runInfo.DBHeight = 20.0
-		self.runInfo.DBDepth = 20.0
-		self.runInfo.DBZ = 50.0
+		self.runInfo.DBWidth = nuPrdStrt.DetHlfWdth()*2.0
+		self.runInfo.DBHeight = nuPrdStrt.DetHlfWdth()*2.0
+		self.runInfo.DBDepth = nuPrdStrt.DetLngth()
+		self.runInfo.DBZ = nuPrdStrt.Hall2Det()
 		self.emittanceUnits = 'mm'
 
 		self.infoTree.Fill()
