@@ -10,7 +10,7 @@ Test script for "nuSTORMPrdStrght" class
   of reference plots.
 
 """
-
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from Simulation import *
@@ -23,8 +23,10 @@ print("========  nuSTORMPrdStrght: tests start  ========")
 nuSTORMPrdStrghtTest = 1
 print()
 print("nuSTORMPrdStrghtTest:", nuSTORMPrdStrghtTest, " check if class is a singleton.")
-nuPrdStrt  = nuStrt.nuSTORMPrdStrght('nuSIMPATH/11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
-nuPrdStrt1 = nuStrt.nuSTORMPrdStrght('nuSIMPATH/11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+nuSIMPATH = os.getenv('nuSIMPATH')
+filename  = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+nuPrdStrt  = nuStrt.nuSTORMPrdStrght(filename)
+nuPrdStrt1 = nuStrt.nuSTORMPrdStrght(filename)
 print("    nuPrdStrt singleton test:", id(nuPrdStrt), id(nuPrdStrt1), id(nuPrdStrt)-id(nuPrdStrt1))
 if nuPrdStrt != nuPrdStrt1:
     raise Exception("nuSTORMPrdStrght is not a singleton class!")
