@@ -60,7 +60,6 @@ import MuonConst as MuonConst
 import numpy as np
 
 muCnst = MuonConst.MuonConst()
-nuStrt = nuPrdStrt.nuSTORMPrdStrght('11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
     
 class NeutrinoEventInstance:
 
@@ -71,6 +70,8 @@ class NeutrinoEventInstance:
 
 #--------  "Built-in methods":
     def __init__(self, pmu=5.):
+
+        nuStrt = nuPrdStrt.nuSTORMPrdStrght()
 
         self._pmu = pmu
         self._TrcSpcCrd, self._pmuGen, self._P_e, self._P_nue, self._P_numu = self.CreateNeutrinos()
