@@ -71,7 +71,7 @@ class nuSTORMPrdStrght(object):
     __instance = None
 
 #--------  "Built-in methods":
-    def __new__(cls, filename):
+    def __new__(cls, filename=None):
         if cls.__instance is None:
             #print('nuSTORMPrdStrght.__new__: creating the nuSTORMPrdStrght object')
             cls.__instance = super(nuSTORMPrdStrght, cls).__new__(cls)
