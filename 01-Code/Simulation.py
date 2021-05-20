@@ -48,11 +48,12 @@ Created on Thu 10Jan21;11:04: Version history:
 """
 
 #--------  Module dependencies
+
 import random as __Rnd
 import numpy as np
 import nuSTORMPrdStrght as nuPrdStrt
 import NeutrinoEventInstance as nuEvtInst
-import ntupleMake as ntM 
+import ntupleMake as ntM
 import plane as plane
 
 #--------  Module methods
