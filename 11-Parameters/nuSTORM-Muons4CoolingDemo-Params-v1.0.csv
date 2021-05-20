@@ -1,0 +1,9 @@
+﻿Parameter,Name,Value,Unit,Comment
+Transverse emittance,TransEmit,10,mm,
+Transverse beta,TransBeta,350,mm,
+Transverse sigma,TransSigma,6,mm,
+Transverse momentum,TransMmtm,10,MeV/c,
+Mean momentum,MmtmBar,100,MeV/c,
+Longitudinal emittance,LongiEmit,25,mm,
+Time sigma,TimeSigma,5,ns,
+Energy sigma,EnergySigma,5,MeV ,
