@@ -1,6 +1,6 @@
 #!/bin/bash
 
-stm=$(PWD)
+stm=$PWD
 #echo $stm
 
 dir="$stm"
