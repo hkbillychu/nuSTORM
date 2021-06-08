@@ -38,17 +38,9 @@ The command \verb+source venv/bin/activate+ places you back
 into the virtual environment.
 
 \section*{Unpacking the code, directories, and running the tests}
-After downloading the tar ball, the installation is created by
-``unzipping'' and ``untarring'' it.
-The combined operation of unzipping and untarring will create a
-directory tree for which the top-level directory will have the name
-``\verb+nuSTORM-M.m.P+'', where ``\verb+M+'' is the major version
-number, ``\verb+m+'' is the minor version number, and ``\verb+P+'' is
-the patch number.
-
-In the top directory (\verb+nuSTORM-M.m.P+) you will find a
-``\verb+README.md+'' file which provides some orientation and
-instructions to run the code.
+After downloading the package from GitHub, or cloning the repositiry,
+you will find a ``\verb+README.md+'' file which provides some orientation
+and instructions to run the code.
 In particular, a \verb+bash+ script ``\verb+startup.bash+'' is
 provided which:
 \begin{itemize}
@@ -57,7 +49,7 @@ provided which:
     located; and
   \item Adds ``\verb+01-Code+'' (see below) to the PYTHONPATH.
     The scripts in "02-Tests" (see below) may then be run with the
-    command "python 02-Tests/<filename>.py".
+    command "python 02-Tests/\textless\,filename\,\textgreater.py".
 \end{itemize}
 Below the top directory, the directory structure in which the code is
 presented is:
