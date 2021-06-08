@@ -1,0 +1,9 @@
+\providecommand{\href}[2]{#2}\begingroup\raggedright\begin{thebibliography}{1}
+
+\bibitem{2021:nuSIM:Doc.01}
+P.~Kyberd and K.~Long, ``{nuSIM: parameters for first simulation of neutrino
+  spectra},'' Tech. Rep. nuSIM-2021-01, March, 2021.
+\newblock
+  \url{https://www.nustorm.org/trac/raw-attachment/wiki/Software-and-computing/Documentation/2021/nuSIM-doc-01.pdf}.
+
+\end{thebibliography}\endgroup
