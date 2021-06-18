@@ -100,39 +100,50 @@ n, bins, patches = plt.hist(tGen, bins=50, color='y', range=(-15.,15.), log=Fals
 plt.xlabel('t (ns)')
 plt.ylabel('Entries')
 plt.title('Time distribution')
-plt.show()
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot1.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(xGen, bins=50, color='y', range=(-20.,20.), log=False)
 plt.xlabel('x (mm)')
 plt.ylabel('Entries')
 plt.title('x position distribution')
-plt.show()
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot2.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(yGen, bins=50, color='y', range=(-20.,20.), log=False)
 plt.xlabel('y (mm)')
 plt.ylabel('Entries')
 plt.title('y position distribution')
-plt.show()
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot3.pdf')
+plt.close()
 
 n, bins, patches = plt.hist(EGen, bins=50, color='y', range=(120,170.), log=False)
 plt.xlabel('E (MeV)')
 plt.ylabel('Entries')
 plt.title('Energy distribution')
-plt.show()
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot4.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(pxGen, bins=50, color='y', range=(-30.,30.), log=False)
 plt.xlabel('px (MeV/c)')
 plt.ylabel('Entries')
 plt.title('px distribution')
-plt.show()
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot5.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(pyGen, bins=50, color='y', range=(-30.,30.), log=False)
 plt.xlabel('py (MeV/c)')
 plt.ylabel('Entries')
 plt.title('py distribution')
-plt.show()
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot6.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(pzGen, bins=50, color='y', range=(70,130.), log=False)
 plt.xlabel('pz (MeV/c)')
 plt.ylabel('Entries')
 plt.title('pz distribution')
-plt.show()
-
+plt.savefig('Scratch/MuonBeam4CoolingDemoTst_plot7.pdf')
+plt.close()
 
 
 

@@ -10,6 +10,7 @@ Test script for "nuSTORMPrdStrght" class
   of reference plots.
 
 """
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -73,33 +74,43 @@ n, bins, patches = plt.hist(pmu, bins=50, color='y', range=(4.0,6.0))
 plt.xlabel('Momentum (GeV)')
 plt.ylabel('Entries')
 plt.title('momentum distribution')
-plt.show()
+plt.savefig('Scratch/nuSTORMPrdStrghtTst_plot1.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(zmu, bins=50, color='y', range=(0.,50.))
 plt.xlabel('z (m)')
 plt.ylabel('Entries')
 plt.title('z distribution')
-plt.show()
+plt.savefig('Scratch/nuSTORMPrdStrghtTst_plot2.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(xmu, bins=50, color='y', range=(-0.15,0.15))
 plt.xlabel('x (m)')
 plt.ylabel('Entries')
 plt.title('x distribution')
-plt.show()
+plt.savefig('Scratch/nuSTORMPrdStrghtTst_plot3.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(ymu, bins=50, color='y', range=(-0.15,0.15))
 plt.xlabel('y (m)')
 plt.ylabel('Entries')
 plt.title('y distribution')
-plt.show()
+plt.savefig('Scratch/nuSTORMPrdStrghtTst_plot4.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(xpmu, bins=50, color='y', range=(-0.0075,0.0075))
 plt.xlabel('x^prime')
 plt.ylabel('Entries')
 plt.title('x^prime distribution')
-plt.show()
+plt.savefig('Scratch/nuSTORMPrdStrghtTst_plot5.pdf')
+plt.close()
+
 n, bins, patches = plt.hist(ypmu, bins=50, color='y', range=(-0.0075,0.0075))
 plt.xlabel('y^prime')
 plt.ylabel('Entries')
 plt.title('y^prime distribution')
-plt.show()
-  
+plt.savefig('Scratch/nuSTORMPrdStrghtTst_plot6.pdf')
+plt.close()  
 
 ##! Complete:
 print()

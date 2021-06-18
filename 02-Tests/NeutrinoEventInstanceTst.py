@@ -14,7 +14,9 @@ Test script for "NeutrinoEventInstance" class
 
 """
 
+import os
 import MuonConst as muCnst
+import nuSTORMPrdStrght as nuPrdStrt
 import NeutrinoEventInstance as nuEvtInst
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +32,9 @@ print("========  NeutrinoEventInstance: tests start  ========")
 NeutrinoEventInstanceTest = 1
 print()
 print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, " Test built-in methods.")
-nuEI = nuEvtInst.NeutrinoEventInstance(5.)
+nuSIMPATH = os.getenv('nuSIMPATH')
+filename  = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+nuEI = nuEvtInst.NeutrinoEventInstance(5., filename)
 print("    __str__:", nuEI)
 print("    --repr__", repr(nuEI))
 
@@ -46,7 +50,8 @@ NeutrinoEventInstanceTest = 3
 print()
 print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, \
       "Test methods by which neutrino-creation event is generated.")
-x = nuEI.CreateNeutrinos()
+nuStrt = nuPrdStrt.nuSTORMPrdStrght(filename)
+x = nuEI.CreateNeutrinos(nuStrt)
 print("    Neutrino event: trace-space coordinates of muon at decay, P_e, P_nue, P_numu:", x)
 del nuEI
 
@@ -59,7 +64,7 @@ Pmu = 5.
 print("    ----> Muon momentum:", Pmu)
 nuEI = []
 for i in range(10000):
-    nuEI.append(nuEvtInst.NeutrinoEventInstance(Pmu))
+    nuEI.append(nuEvtInst.NeutrinoEventInstance(Pmu, filename))
 for i in range(5):
     print("    nuEI[i]:", nuEI[i])
 
@@ -107,7 +112,7 @@ gamma = Emu/(mc.mass()/1000.)
 l = 1./(gamma*mc.lifetime()*beta*mc.SoL())
 y = n[0]*np.exp(-l*bins)
 plt.plot(bins, y, '-', color='b')
-plt.show()
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot1.pdf')
 plt.close()
 
 #-- Energy distributions:
@@ -115,21 +120,21 @@ n, bins, patches = plt.hist(Ee, bins=50, color='y', range=(0.,5.0))
 plt.xlabel('Energy (GeV)')
 plt.ylabel('Frequency')
 plt.title('Electron energy distribution')
-plt.show()
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot2.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(Enue, bins=50, color='y', range=(0.,5.))
 plt.xlabel('Energy (GeV)')
 plt.ylabel('Frequency')
 plt.title('Electron-neutrino energy distribution')
-plt.show()
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot3.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(Enumu, bins=50, color='y', range=(0.,5.))
 plt.xlabel('Energy (GeV)')
 plt.ylabel('Frequency')
 plt.title('Muon-neutrino energy distribution')
-plt.show()
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot4.pdf')
 plt.close()
 
 ##! Complete:

@@ -8,7 +8,9 @@ Test script for "Simulation" class ... initialisation and get methods
 
 """
 
+import os
 import Simulation as Simu
+import nuSTORMPrdStrght as nuStrt
 
 ##! Start:
 print("========  Simulation: tests start  ========")
@@ -17,8 +19,13 @@ print("========  Simulation: tests start  ========")
 SimulationTest = 1
 print()
 print("SimulationTest:", SimulationTest, " check if class is a singleton.")
-Smltn  = Simu.Simulation()
-Smltn1 = Simu.Simulation()
+nuSIMPATH    = os.getenv('nuSIMPATH')
+filename     = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+rootfilename = os.path.join(nuSIMPATH, 'Scratch/nuSIM-Simulation-tst.root')
+print(filename)
+print(rootfilename)
+Smltn  = Simu.Simulation(100, 5., filename, rootfilename)
+Smltn1 = Simu.Simulation(100, 5., filename, rootfilename)
 print("---->Smltn singleton test:", id(Smltn), id(Smltn1), id(Smltn)-id(Smltn1))
 if Smltn != Smltn1:
     raise Exception("Simulation is not a singleton class!")

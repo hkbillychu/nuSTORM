@@ -96,6 +96,7 @@ class Simulation(object):
             cls._pmu          = pmu
             cls._nufile       = filename
             cls._rootfilename = rootfilename
+            print(filename)
             cls._nuStrt       = nuPrdStrt.nuSTORMPrdStrght(filename)
 
             # Summarise initialisation
@@ -118,7 +119,7 @@ class Simulation(object):
     # Define root output stream
         runNumber=9.0                   # set run number
  # Define ntupleMaker called with run number; output file name; production straight data
-        nt = ntM.ntupleMake(runNumber, self._nuStrt, "nuStorm.root")
+        nt = ntM.ntupleMake(runNumber, self._nuStrt, self._rootfilename)
         if (nt.Version != 2.6):
           raiseException("Incorrect version of ntupleMaker")
 # Define the distance of the downstream plane where the flux is calculated

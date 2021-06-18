@@ -8,13 +8,18 @@ Test script for "Simulation" class ... initialisation and get methods
 
 """
 
+import os
 import Simulation as Simu
 
 ##! Start:
 print("========  Simulation: start  ========")
 print()
 
-Smltn = Simu.Simulation(5000, 5., 'nuSIMPATH/11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv', 'nuSTORM.root')
+nuSIMPATH = os.getenv('nuSIMPATH')
+filename  = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+rootfilename = os.path.join(nuSIMPATH, 'Scratch/nuSIM-RunSimulation.root')
+
+Smltn = Simu.Simulation(5000, 5., filename, rootfilename)
 
 print()
 print(".... Execute simulation")

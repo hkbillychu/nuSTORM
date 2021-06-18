@@ -8,6 +8,7 @@ Test script for "FluxShape"
 
 """
 
+import os
 import MuonConst as muCnst
 import NeutrinoEventInstance as nuEvtInst
 import numpy as np
@@ -26,12 +27,17 @@ print("FluxShapeTest:", FluxShapeTest, " get one event.")
 NoEvtAccepted = True
 Prt1True = False
 Prt2True = False
+
+nuSIMPATH = os.getenv('nuSIMPATH')
+filename  = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+
 # .. assume mu+
 muBmE   = 3.8
 nueSlp  = 1./(muBmE - 0.)
 numuSlp  = 1./(muBmE - mc.mass()/1000.)
+
 while NoEvtAccepted:
-    nuEI    = nuEvtInst.NeutrinoEventInstance(muBmE)
+    nuEI    = nuEvtInst.NeutrinoEventInstance(muBmE, filename)
     pt_nue  = np.sqrt(nuEI.getnue4mmtm()[1][0]**2 + nuEI.getnue4mmtm()[1][1]**2)
     pt_numu = np.sqrt(nuEI.getnumu4mmtm()[1][0]**2 + nuEI.getnumu4mmtm()[1][1]**2)
 
@@ -62,7 +68,7 @@ print("FluxShapeTest:", FluxShapeTest, \
 nuEIelec = []
 nuEImuon = []
 for i in range(10000):
-    nuEI = nuEvtInst.NeutrinoEventInstance(muBmE)
+    nuEI = nuEvtInst.NeutrinoEventInstance(muBmE, filename)
     pt_nue  = np.sqrt(nuEI.getnue4mmtm()[1][0]**2 + nuEI.getnue4mmtm()[1][1]**2)
     pt_numu = np.sqrt(nuEI.getnumu4mmtm()[1][0]**2 + nuEI.getnumu4mmtm()[1][1]**2)
 
@@ -85,14 +91,14 @@ n, bins, patches = plt.hist(nuEIelec, bins=50, color='y', range=(0.,5.))
 plt.xlabel('Energy (GeV)')
 plt.ylabel('Frequency')
 plt.title('Electron-neutrino energy distribution')
-plt.show()
+plt.savefig('Scratch/FluxCalcOutline_plot1.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(nuEImuon, bins=50, color='y', range=(0.,5.))
 plt.xlabel('Energy (GeV)')
 plt.ylabel('Frequency')
 plt.title('Muon-neutrino energy distribution')
-plt.show()
+plt.savefig('Scratch/FluxCalcOutline_plot2.pdf')
 plt.close()
 
 ##! Complete:
