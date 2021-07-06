@@ -57,6 +57,7 @@ Class nuSTORMPrdStrght:
   
 Created on Thu 21Feb21. Version history:
 ----------------------------------------
+ 1.1: 10May21: Add runType
  1.0: 21Feb21: First implementation
 
 @author: kennethlong
@@ -71,7 +72,7 @@ class nuSTORMPrdStrght(object):
     __instance = None
 
 #--------  "Built-in methods":
-    def __new__(cls, filename=None):
+    def __new__(cls, filename):
         if cls.__instance is None:
             #print('nuSTORMPrdStrght.__new__: creating the nuSTORMPrdStrght object')
             cls.__instance = super(nuSTORMPrdStrght, cls).__new__(cls)
@@ -87,6 +88,7 @@ class nuSTORMPrdStrght(object):
             cls._DetHlfWdth      = cls._PrdStrghtParams.iat[6,2]
             cls._DetLngth        = cls._PrdStrghtParams.iat[7,2]
             cls._Hall2Det        = cls._PrdStrghtParams.iat[8,2]
+            cls._runType         = cls._PrdStrghtParams.iat[9,2]
             
         return cls.__instance
 
@@ -156,6 +158,9 @@ class nuSTORMPrdStrght(object):
   
     def Hall2Det(self):
         return deepcopy(self._Hall2Det)
+    
+    def runType(self):
+        return deepcopy(self._runType)
 
     def printParams(self):
         print(self._PrdStrghtParams)
