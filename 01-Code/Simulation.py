@@ -41,6 +41,7 @@ Class Simulation
 
 Created on Thu 10Jan21;11:04: Version history:
 ----------------------------------------------
+ 2.1: 08Jul21: Make pmu pbeam - to allow muon and pion running
  2.0: 12May21: Add a runType to allow muon and pion flash
  1.1: 25Feb21: Add Output to a root file
  1.0: 10Jan21: First implementation
@@ -58,7 +59,7 @@ import PionDecay as pd
 import PionEventInstance as piEvtInst
 import ntupleMake as ntM 
 import plane as plane
-#import pionFlashPlots as pfp
+import Plots as plots
 
 #--------  Module methods
 def getRandom():
@@ -88,7 +89,7 @@ class Simulation(object):
     __instance = None
 
 #--------  "Built-in methods":
-    def __new__(cls, NEvt=5, pmu=5., filename=None, rootfilename=None):
+    def __new__(cls, NEvt=5, pbeam=5., filename=None, rootfilename=None):
         if cls.__instance is None:
             print('Simulation.__new__: creating the Simulation object')
             print('-------------------')
@@ -97,11 +98,11 @@ class Simulation(object):
             cls.__Rnd.seed(int(cls.__RandomSeed))
 
             cls._NEvt         = NEvt
-            cls._pmu          = pmu
+            cls._pbeam        = pbeam
             cls._nufile       = filename
             cls._rootfilename = rootfilename
             cls._nuStrt       = nuPrdStrt.nuSTORMPrdStrght(filename)
-#            cls._piFlpl       = pfp.pionFlashPlots()
+            cls._plots        = plots.Plots()
 
             # Summarise initialisation
             cls.print(cls)
@@ -148,12 +149,14 @@ class Simulation(object):
                         iCnt = 0
 
 #  Generate muon decay event
-                nuEvt = nuEvtInst.NeutrinoEventInstance(self._pmu)
+                nuEvt = nuEvtInst.NeutrinoEventInstance(self._pbeam)
             #  write to event branch
                 nt.treeFill(nuEvt)
             #  Check intersection with downstream plane
                 hitE,hitMu=fluxPlane.findHitPositionMuEvt(nuEvt)
                 nt.fluxFill(hitE, hitMu)
+#   Fill some plots
+                self._plots.fill(hitMu)
                 if prt == 1:
                     prt = 0
                     print(nuEvt)
@@ -171,19 +174,18 @@ class Simulation(object):
                         Scl  = Scl * 10
                         iCnt = 0
 #  Generate a pi to mu+munu - given the central momentum of the pion beam
-                ppi = 0.63
-                piEvt = piEvtInst.PionEventInstance(ppi)
+                piEvt = piEvtInst.PionEventInstance(self._pbeam)
                 nt.pionTreeFill(piEvt)
 #  Look at the intersection with the detector plane
                 hitMu=fluxPlane.findHitPositionPiEvt(piEvt)
                 nt.flashFluxFill(hitMu)
-#  Look at the intersection with the detector plane
-#                self._piFlpl.fill(piEvt, hitMu)
+#  Fill some plots
+                self._plots.fill(hitMu)
         else:
             print ("Unrecognised run type ", runType, "  check ", self._nufile, "\n")
             sys.exit("Unrecognised run type ")
         nt.closeFile()
-#        self._piFlpl.histdo()
+        self._plots.histdo()
                 
             
 #--------  "Get methods" only; version, reference, and constants
@@ -200,7 +202,7 @@ class Simulation(object):
         print("    Simulation.print: version:", self.CdVrsn(self))
         print("      state of random generator:", self.__Rnd.getstate()[0])
         print("      number of events to generate:", self._NEvt)
-        print("      muon beam momentum setting:", self._pmu)
+        print("      muon beam momentum setting:", self._pbeam)
         print("      nuSTORM specification file:", self._nufile)
         print("      root filename for output  :", self._rootfilename)
         print(self._nuStrt)
