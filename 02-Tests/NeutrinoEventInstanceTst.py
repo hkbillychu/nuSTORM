@@ -28,7 +28,7 @@ mc = muCnst.MuonConst()
 ##! Start:
 print("========  NeutrinoEventInstance: tests start  ========")
 
-debug=1
+debug=0
 
 ##! Create instance, test built-in methods:
 NeutrinoEventInstanceTest = 1
@@ -65,7 +65,7 @@ print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, \
 Pmu = 5.
 print("    ----> Muon momentum:", Pmu)
 nuEI = []
-for i in range(5):
+for i in range(100):
     if(debug==1):
       print("Number of instance:", i+1)
     nuEI.append(nuEvtInst.NeutrinoEventInstance(Pmu, filename))
@@ -122,9 +122,9 @@ if (debug==1):
     print("Soak Test:PrdStrghtLngth, Circumference, ArcLen, ArcRad ",PrdStrghtLngth, Circumference, ArcLen, ArcRad)
     i=1
 for nuEvt in nuEI:
-   
-    print("Number of instance:", i)
-    i=i+1
+    if (debug==1):
+         print("Number of instance:", i)
+         i=i+1
     s     = np.append(s,     nuEvt.getTraceSpaceCoord()[0])
     where = nuEvt.getTraceSpaceCoord()[0]%Circumference
     
@@ -262,6 +262,7 @@ plt.ylabel('X')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot5.pdf')
 plt.close()
 
+debug=0
 ##beamdirectionplotting
 ## Z vs X distribution
 fig, ax = plt.subplots()

@@ -102,7 +102,9 @@ class NeutrinoEventInstance:
         Circumference  = nuStrt.Circumference()
         ArcLen         = nuStrt.ArcLen()       
         ArcRad         = ArcLen / math.pi   #.. KL mod
-
+        debug=0
+        if(debug==1):
+           print("--------Begining OF INSTANCE-------")
         #.. Prepare--get neutrino decay instance in muon rest frame:
         z = 2.* PrdStrghtLngth
         Dcy = 0
@@ -135,7 +137,7 @@ class NeutrinoEventInstance:
         #.. Boost to nuSTORM frame:
         if NeutrinoEventInstance.__Debug:
             print("NeutrinoEventInstance.CreateNeutrinos: rotate and boost to nuSTORM rest frame:")
-        P_e, P_nue, P_numu = self.Boost2nuSTORM(Dcy, nuStrt)
+        P_e, P_nue, P_numu = self.Boost2nuSTORM(Dcy, nuStrt,s)
         if NeutrinoEventInstance.__Debug:
             print("----> P_e   :", P_e)
             print("----> P_nue :", P_nue)
@@ -146,6 +148,9 @@ class NeutrinoEventInstance:
 
 #.. Trace space coordinate generation: array(s, x, y, z, x', y')
     def GenerateDcyPhaseSpace(self, Dcy, Pmu, nuStrt):
+        Debug=0
+        if(Debug==1):
+              print('GenerateDcyPhaseSpace starting')
         coord = np.array([0., 0., 0., 0., 0., 0.])
 
         #.. longitudinal position, "s", z:
@@ -188,10 +193,8 @@ class NeutrinoEventInstance:
         where          = s%Circumference
         r              = ArcLen/math.pi #r = ArcRad
         
-        Debug=1
-        debug=1
-        if(debug==1):
-           print("--------Begining OF INSTANCE-------")
+        Debug=0
+        debug=0
         if ( PrdStrghtLngth>=where):
             if(Debug==1):
              print("The muon is in the production straight")
@@ -212,7 +215,7 @@ class NeutrinoEventInstance:
             ArcLenCovered=where - PrdStrghtLngth
             theta= math.pi*ArcLenCovered/ArcLen #in radians
             #Theta=  theta   #Due to coordinate system flipping X-->-X ; Y--> -Y
-            print('theta in arc1,s', theta, s)
+           
             R    = np.array([[math.cos(theta), 0., math.sin(theta)], [0., 1., 0.], [-math.sin(theta), 0., math.cos(theta)]])
             Rinv = np.array([[math.cos(theta), 0.,-math.sin(theta)], [0., 1., 0.], [math.sin(theta), 0., math.cos(theta)]])
             #AngleWrtZ= theta*180/math.pi #direction angle with respect to z axis in degree
@@ -254,18 +257,20 @@ class NeutrinoEventInstance:
 
 
 #.. Boost from muon rest frame to nuSTORM frame:
-    def Boost2nuSTORM(self, Dcy, nuStrt):
+    def Boost2nuSTORM(self, Dcy, nuStrt, s):
         ''' Present approximation is muon propagates along z axis, so, boost only 
             in preparation for later, include rotation matrix to transform from
             nustorm frame to frame with z axis along muon momentum and back '''
-        Debug=1
-        debug=1
+        Debug=0
+        debug=0
+        if(Debug==1):
+              print('Boost2nuSTORM starting')
         Pmu = self.getpmu()
         Emu = np.sqrt(Pmu**2 + \
                                               NeutrinoEventInstance.__mumass**2)
         beta   = Pmu / Emu
         gamma  = Emu / NeutrinoEventInstance.__mumass
-        s=self.GenerateLongiPos(Dcy, Pmu)
+       
         R    = self.BeamDir(s, nuStrt, Pmu)[0]
         Rinv = self.BeamDir(s, nuStrt, Pmu)[1]
         theta= self.BeamDir(s, nuStrt, Pmu)[3]
@@ -312,8 +317,10 @@ class NeutrinoEventInstance:
             print("NeutrinoEventInstance.RotnBoos:")
             print("----> P, R, Rinv, gamma, beta:", P, "\n", \
                   R, "\n", Rinv, "\n", gamma, beta)
-        Debug=1
-        debug=1 
+        Debug=0
+        debug=0 
+        if(Debug==1):
+              print('RotnBoost starting')
        # print("P[1], 3 vector before boost", P[1])            
       #  p3 = np.dot(R, P[1])
        # print("p3, 3 vector after rotation", p3)        
