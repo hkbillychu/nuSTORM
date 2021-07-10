@@ -65,7 +65,7 @@ print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, \
 Pmu = 5.
 print("    ----> Muon momentum:", Pmu)
 nuEI = []
-for i in range(100):
+for i in range(10000):
     if(debug==1):
       print("Number of instance:", i+1)
     nuEI.append(nuEvtInst.NeutrinoEventInstance(Pmu, filename))
@@ -259,12 +259,36 @@ plt.scatter(z,x)
 plt.axis([max(z)+20,min(z)-20,max(x)+20,min(x)-20])
 plt.xlabel('Z')
 plt.ylabel('X')
+plt.title('Muon Decay Position')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot5.pdf')
 plt.close()
 
 debug=0
 ##beamdirectionplotting
-## Z vs X distribution
+fig, ax = plt.subplots()
+U=np.array([])
+V=np.array([])
+i=1
+for P in PBl:
+    if(debug==1):
+          print("Plotting: Beam momentum Pb",P)
+          print("Number of instance:", i)
+          i=i+1
+    U=np.append(U,- P[2])
+    V=np.append(V,- P[0])
+    # X= nuSTORM -Z axis; # Y= nuSTORM -X axis
+Q=ax.quiver(z,x, U, V)
+ax.quiverkey(Q, X=0.5, Y=0.90, U=5, label='Beam Momentum', labelpos='E')
+ax.invert_xaxis()
+ax.invert_yaxis()
+plt.xlabel('Z')
+plt.ylabel('X')
+plt.title('Beam Direction')
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot18.pdf')
+plt.close()
+
+
+##Decay product momentum direction
 fig, ax = plt.subplots()
 U=np.array([])
 V=np.array([])
@@ -277,7 +301,8 @@ for P in PBl:
     U=np.append(U,- P[2]) 
     V=np.append(V,- P[0])  
     # X= nuSTORM -Z axis; # Y= nuSTORM -X axis
-ax.quiver(z,x, U, V)  
+Q=ax.quiver(z,x, U, V)  
+ax.quiverkey(Q, X=0.4, Y=0.90, U=5, label='Beam Momentum', labelpos='E')
 U=np.array([])
 V=np.array([])
 i=1
@@ -289,8 +314,8 @@ for P in Pel:
           i=i+1
     U=np.append(U,- P[2])
     V=np.append(V,- P[0])
-ax.quiver(z,x, U, V, color='r')
-
+Q=ax.quiver(z,x, U, V, color='r')
+ax.quiverkey(Q, X=0.4, Y=0.85, U=2, label='Electron Momentum', labelpos='E')
 U=np.array([])
 V=np.array([])
 i=1
@@ -301,8 +326,8 @@ for P in Pnuel:
           i=i+1
     U=np.append(U,- P[2])
     V=np.append(V,- P[0])
-ax.quiver(z,x, U, V, color='g')
-
+Q=ax.quiver(z,x, U, V, color='g')
+ax.quiverkey(Q, X=0.4, Y=0.80, U=1.5, label='Electron Neutrino Momentum', labelpos='E')
 U=np.array([])
 V=np.array([])
 i=1
@@ -314,11 +339,13 @@ for P in Pnumul:
     
     U=np.append(U,- P[2])
     V=np.append(V,- P[0])
-ax.quiver(z,x, U, V, color='b')
+Q=ax.quiver(z,x, U, V, color='b')
+ax.quiverkey(Q, X=0.4, Y=0.75, U=2, label='Muon Neutrino Momentum', labelpos='E')
 ax.invert_xaxis()
 ax.invert_yaxis()
 plt.xlabel('Z')
 plt.ylabel('X')
+plt.title('Momentum of Decay Products')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot19.pdf')
 plt.close()
 
@@ -327,14 +354,14 @@ plt.close()
 n, bins, patches = plt.hist(PrdStrghtcose, bins=50, color='y', range=(-1,1))
 plt.xlabel('PrdStrghtcose')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron momentum with respect to beam direction in the production straight')
+plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot6.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(PrdStrghtcosnue, bins=50, color='y', range=(-1,1))
 plt.xlabel('PrdStrghtcosnue')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron neutrino momentum with respect to beam direction in the production straight')
+plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot7.pdf')
 plt.close()
 
@@ -342,21 +369,21 @@ n, bins, patches = plt.hist(PrdStrghtcosnumu, bins=50, color='y', range=(-1,1))
 #print(PrdStrghtcosnumu)
 plt.xlabel('PrdStrghtcosnumu')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of muon neutrino momentum with respect to beam direction in the production straight')
+plt.title('Angular distrubution of muon neutrino momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot8.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(Arc1cose, bins=50, color='y', range=(-1,1))
 plt.xlabel('Arc1cose')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron momentum with respect to beam direction in the first arc')
+plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the first arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot9.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(Arc1cosnue, bins=50, color='y', range=(-1,1))
 plt.xlabel('Arc1cosnue')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron neutrino momentum with respect to beam direction in the first arc')
+plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the first arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot10.pdf')
 plt.close()
 
@@ -364,21 +391,21 @@ n, bins, patches = plt.hist(Arc1cosnumu, bins=50, color='y', range=(-1,1))
 #print(Arc1cosnumu)
 plt.xlabel('Arc1cosnumu')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of muon neutrino momentum with respect to beam direction in the first arc')
+plt.title('Angular distrubution of muon neutrino momentum \n with respect to beam direction in the first arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot11.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(RetStrghtcose, bins=50, color='y', range=(-1,1))
 plt.xlabel('RetStrghtcose')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron momentum with respect to beam direction in the production straight')
+plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot12.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(RetStrghtcosnue, bins=50, color='y', range=(-1,1))
 plt.xlabel('RetStrghtcosnue')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron neutrino momentum with respect to beam direction in the return straight')
+plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the return straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot13.pdf')
 plt.close()
 
@@ -386,21 +413,21 @@ n, bins, patches = plt.hist(RetStrghtcosnumu, bins=50, color='y', range=(-1,1))
 #print(RetStrghtcosnumu)
 plt.xlabel('RetStrghtcosnumu')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron neutrino momentum with respect to beam direction in the return straight')
+plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the return straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot14.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(Arc2cose, bins=50, color='y', range=(-1,1))
 plt.xlabel('Arc2cose')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron momentum with respect to beam direction in the second arc')
+plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the second arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot15.pdf')
 plt.close()
 
 n, bins, patches = plt.hist(Arc2cosnue, bins=50, color='y', range=(-1,1))
 plt.xlabel('Arc2cosnue')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron neutrino momentum with respect to beam direction in the second arc')
+plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the second arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot16.pdf')
 plt.close()
 
@@ -408,7 +435,7 @@ n, bins, patches = plt.hist(Arc2cosnumu, bins=50, color='y', range=(-1,1))
 #print(Arc2cosnumu)
 plt.xlabel('Arc2cosnumu')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of muon neutrino momentum with respect to beam direction in the second arc')
+plt.title('Angular distrubution of muon neutrino momentum \n with respect to beam direction in the second arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot17.pdf')
 plt.close()
 ##! Complete:
