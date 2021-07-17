@@ -160,11 +160,11 @@ class NeutrinoEventInstance:
      
         x, y, xp, yp = nuStrt.GenerateTrans(coord[0])
         coord[1] = x*math.cos(theta)+self.BeamDir(coord[0], nuStrt, Pmu)[2][0]
-       # coord[1] = self.BeamDir(coord[0], nuStrt, Pmu)[2][0]
+       
         coord[2] = y+self.BeamDir(coord[0], nuStrt, Pmu)[2][1]
-       # coord[2] = 0 
+  
         coord[3] = -x*math.sin(theta)+self.BeamDir(coord[0], nuStrt, Pmu)[2][2]
-       # coord[3] = +self.BeamDir(coord[0], nuStrt, Pmu)[2][2]
+      
         coord[4] = xp
         coord[5] = yp
 
@@ -321,7 +321,8 @@ class NeutrinoEventInstance:
         debug=0 
         if(Debug==1):
               print('RotnBoost starting')
-       # print("P[1], 3 vector before boost", P[1])            
+              print('Gamma; Beta', gamma, beta)
+              print("P[1], 3 vector before boost", P[1])            
       #  p3 = np.dot(R, P[1])
        # print("p3, 3 vector after rotation", p3)        
         Ec = P[0]
@@ -330,10 +331,14 @@ class NeutrinoEventInstance:
         Ef = gamma * (Ec + beta * Pc)
         Pf = gamma * (Pc + beta * Ec)
 
-        p3 = np.array([0,0,0])
-        p3[0] = P[1][0]
-        p3[1] = P[1][1]
-        p3[2] = Pf
+        p3 = []
+       
+        p3.append(P[1][0])
+       
+        p3.append( P[1][1])
+        p3.append(Pf)
+        p3 = np.array(p3)
+       # print("p3",p3)
         if(debug==1):
           print("RotnBoost:p3, 3 vector after boost", p3)
         p3=np.dot(R,p3)

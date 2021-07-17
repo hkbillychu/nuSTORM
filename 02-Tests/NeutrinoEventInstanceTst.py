@@ -118,6 +118,11 @@ Circumference  = nuStrt.Circumference()
 ArcLen         = nuStrt.ArcLen()
 ArcRad         = ArcLen/mth.pi
 
+countPrdStrght=0
+countArc1=0
+countRetStrght=0
+countArc2=0
+
 if (debug==1):
     print("Soak Test:PrdStrghtLngth, Circumference, ArcLen, ArcRad ",PrdStrghtLngth, Circumference, ArcLen, ArcRad)
     i=1
@@ -179,6 +184,8 @@ for nuEvt in nuEI:
     cosnue   = np.dot(Pb,Pnue3)/(np.linalg.norm(Pb)*np.linalg.norm(Pnue3))
     cosnumu  = np.dot(Pb,Pnumu3)/(np.linalg.norm(Pb)*np.linalg.norm(Pnumu3))
     
+    if(debug==1):
+       print("cose; cosnue; cosnumu", cose, cosnue, cosnumu)
 
     #if(PrdStrghtLngth>=zi>=0) and (1>=xi>=-1):
     if (PrdStrghtLngth>=where>=0):
@@ -187,6 +194,7 @@ for nuEvt in nuEI:
         PrdStrghtcose = np.append(PrdStrghtcose,cose)
         PrdStrghtcosnue = np.append(PrdStrghtcosnue,cosnue)
         PrdStrghtcosnumu = np.append(PrdStrghtcosnumu,cosnumu)
+        countPrdStrght+=1
     if ((PrdStrghtLngth+ArcLen)>=where>PrdStrghtLngth):
     #if(zi>PrdStrghtLngth):
         if(debug==1):
@@ -194,20 +202,22 @@ for nuEvt in nuEI:
         Arc1cose = np.append(Arc1cose,cose)
         Arc1cosnue = np.append(Arc1cosnue,cosnue)
         Arc1cosnumu = np.append(Arc1cosnumu,cosnumu)
+        countArc1+=1
     if ((2*PrdStrghtLngth+ArcLen)>=where>(PrdStrghtLngth+ArcLen)):
         if(debug==1):
           print("Soak Test: In the return straight")
         RetStrghtcose = np.append(RetStrghtcose,cose)
         RetStrghtcosnue = np.append(RetStrghtcosnue,cosnue)
         RetStrghtcosnumu = np.append(RetStrghtcosnumu,cosnumu)
-   
+        countRetStrght+=1
     if ((2*PrdStrghtLngth+2*ArcLen)>=where>(2*PrdStrghtLngth+ArcLen)):
         if(debug==1):
           print("Soak Test: In the return straight")
         Arc2cose = np.append(Arc2cose,cose)
         Arc2cosnue = np.append(Arc2cosnue,cosnue)
         Arc2cosnumu = np.append( Arc2cosnumu,cosnumu)
-  
+        countArc2+=1
+   
     pt_e    = np.sqrt(nuEvt.gete4mmtm()[1][0]**2 + nuEvt.gete4mmtm()[1][1]**2)
     pt_nue  = np.sqrt(nuEvt.getnue4mmtm()[1][0]**2 + nuEvt.getnue4mmtm()[1][1]**2)
     pt_numu = np.sqrt(nuEvt.getnumu4mmtm()[1][0]**2 + nuEvt.getnumu4mmtm()[1][1]**2)
@@ -216,6 +226,15 @@ for nuEvt in nuEI:
     tannue  = np.append(tannue,  (pt_nue/nuEvt.getnue4mmtm()[1][2]) )
     tannumu = np.append(tannumu, (pt_numu/nuEvt.getnumu4mmtm()[1][2]) )
 
+print("Number of decays after evaluation cos", (countPrdStrght+countArc1+countRetStrght+countArc2))
+print("Number of electrons", len(PrdStrghtcose)+len(Arc1cose)+len(RetStrghtcose)+len(Arc2cose))
+print("Number of electronneutrinos", len(PrdStrghtcosnue)+len(Arc1cosnue)+len(RetStrghtcosnue)+len(Arc2cosnue))
+print("Number of muon neutrinos", len(PrdStrghtcosnumu)+len(Arc1cosnumu)+len(RetStrghtcosnumu)+len(Arc2cosnumu))
+
+countPrdStrght=0
+countArc1=0
+countRetStrght=0
+countArc2=0
 
 #-- Lifetime distribution:
 n, bins, patches = plt.hist(s, bins=50, color='y', log=True)
@@ -351,21 +370,21 @@ plt.close()
 
 
 ##Angular distribution of decay product momentum with respect to beam momentum
-n, bins, patches = plt.hist(PrdStrghtcose, bins=50, color='y', range=(min(PrdStrghtcose),max(PrdStrghtcose)))
+n, bins, patches = plt.hist(PrdStrghtcose, bins=500, color='y', range=(0.99,1))
 plt.xlabel('PrdStrghtcose')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot6.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(PrdStrghtcosnue, bins=50, color='y', range=(min(PrdStrghtcosnue),max(PrdStrghtcosnue)))
+n, bins, patches = plt.hist(PrdStrghtcosnue, bins=500, color='y', range=(0.99,1))
 plt.xlabel('PrdStrghtcosnue')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot7.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(PrdStrghtcosnumu, bins=50, color='y', range=(min(PrdStrghtcosnumu),max(PrdStrghtcosnumu)))
+n, bins, patches = plt.hist(PrdStrghtcosnumu, bins=500, color='y', range=(0.99,1))
 #print(PrdStrghtcosnumu)
 plt.xlabel('PrdStrghtcosnumu')
 plt.ylabel('Frequency')
@@ -373,21 +392,21 @@ plt.title('Angular distrubution of muon neutrino momentum \n with respect to bea
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot8.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(Arc1cose, bins=50, color='y', range=(min(Arc1cose),max(Arc1cose)))
+n, bins, patches = plt.hist(Arc1cose, bins=500, color='y', range=(0.99,1))
 plt.xlabel('Arc1cose')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the first arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot9.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(Arc1cosnue, bins=50, color='y', range=(min(Arc1cosnue),max(Arc1cosnue)))
+n, bins, patches = plt.hist(Arc1cosnue, bins=500, color='y', range=(0.99,1))
 plt.xlabel('Arc1cosnue')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the first arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot10.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(Arc1cosnumu, bins=50, color='y', range=(min(Arc1cosnumu),max(Arc1cosnumu)))
+n, bins, patches = plt.hist(Arc1cosnumu, bins=500, color='y', range=(0.99,1))
 #print(Arc1cosnumu)
 plt.xlabel('Arc1cosnumu')
 plt.ylabel('Frequency')
@@ -395,21 +414,21 @@ plt.title('Angular distrubution of muon neutrino momentum \n with respect to bea
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot11.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(RetStrghtcose, bins=50, color='y', range=(min(RetStrghtcose),max(RetStrghtcose)))
+n, bins, patches = plt.hist(RetStrghtcose, bins=500, color='y', range=(0.99,1))
 plt.xlabel('RetStrghtcose')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the production straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot12.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(RetStrghtcosnue, bins=50, color='y', range=(min(RetStrghtcosnue),max(RetStrghtcosnue)))
+n, bins, patches = plt.hist(RetStrghtcosnue, bins=500, color='y', range=(0.99,1))
 plt.xlabel('RetStrghtcosnue')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the return straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot13.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(RetStrghtcosnumu, bins=50, color='y', range=(min(RetStrghtcosnumu),max(RetStrghtcosnumu)))
+n, bins, patches = plt.hist(RetStrghtcosnumu, bins=500, color='y', range=(0.99,1))
 #print(RetStrghtcosnumu)
 plt.xlabel('RetStrghtcosnumu')
 plt.ylabel('Frequency')
@@ -417,22 +436,22 @@ plt.title('Angular distrubution of electron neutrino momentum \n with respect to
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot14.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(Arc2cose, bins=50, color='y', range=(min(Arc2cose),max(Arc2cose)))
+n, bins, patches = plt.hist(Arc2cose, bins=500, color='y', range=(0.99,1))
 plt.xlabel('Arc2cose')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the second arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot15.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(Arc2cosnue, bins=50, color='y', range=(min(Arc2cosnue),max(Arc2cosnue)))
+n, bins, patches = plt.hist(Arc2cosnue, bins=500, color='y', range=(0.99,1))
 plt.xlabel('Arc2cosnue')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction in the second arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot16.pdf')
 plt.close()
 
-n, bins, patches = plt.hist(Arc2cosnumu, bins=50, color='y', range=(min(Arc2cosnumu),max(Arc2cosnumu)))
 #print(Arc2cosnumu)
+n, bins, patches = plt.hist(Arc2cosnumu, bins=500, color='y', range=(0.99,1))
 plt.xlabel('Arc2cosnumu')
 plt.ylabel('Frequency')
 plt.title('Angular distrubution of muon neutrino momentum \n with respect to beam direction in the second arc')
