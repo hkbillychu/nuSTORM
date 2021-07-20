@@ -22,7 +22,10 @@ Class NeutrinoEventInstance:
   _P_e      : Electron 4 momentum: (E, array(px, py, pz)), GeV
   _P_nue    : Electron-neutrino 4 momentum: (E, array(px, py, pz)), GeV
   _P_numu   : Muon-neuutrino 4 momentum: (E, array(px, py, pz)), GeV
-    
+  _Detection_P_e    : Checking if the electron is detected 
+  _Detection_P_nue  : Checking if the electron neutrino is detected
+  _Detection_P_numu : Checking if the muon neutrino is detected
+      
   Methods:
   --------
   Built-in methods __new__, __repr__ and __str__.
@@ -37,16 +40,20 @@ Class NeutrinoEventInstance:
     gete4mmtm         : Returns electron 4 momentum: (E, array(px, py, pz)), GeV
     getnue4mmtm       : Returns electron-neutrino 4 momentum: (E, array(px, py, pz)), GeV
     getnumu4mmtm      : Returns muon-neutrino 4 momentum: (E, array(px, py, pz)), GeV
-  
+    is_e_detected     : Returns True if the electron is detected
+    is_nue_detected   : Returns True if the electron neutrino is detected
+    is_numu_detected  : Returns True if the muon neutrino is detected 
+
   General methods:
     CreateNeutrinos      : Manager for neutrino decay, returns z (m) of decay (real), P_e, P_nue, P_numu, RestFrame
                            Restframe contains a dump of the instance attributes of the MuonDecay class
     GenerateDcyPhaseSpace: Generates trace-space position of decay
     GenerateLongiPos     : Returns s, z of decay
     BeamDir              : Returns position of the beam and rotation operator correspoinding to the direction of velocity 
-    Boost2nuSTORM        : Boots to nuSTORM rest frame -- i.e. boost to pmu
+    Boost2nuSTORM        : Boost to nuSTORM rest frame -- i.e. boost to pmu
     RotnBoost            : Operator; rotates and boosts rest-frame coordinates to nuSTORM frame
-   
+    isDetected           : Returns True if the decay product is detected, otherwise False.
+
 Created on Sat 16Jan21;02:26: Version history:
 ----------------------------------------------
  1.2: 18Jun21: Pass nuSTORM production straight parameter file name
@@ -78,7 +85,7 @@ class NeutrinoEventInstance:
         nuStrt = nuPrdStrt.nuSTORMPrdStrght(filename)
 
         self._pmu = pmu
-        self._ct, self._TrcSpcCrd, self._pmuGen, self._P_e, self._P_nue, self._P_numu, self._Pb = self.CreateNeutrinos(nuStrt)
+        self._ct, self._TrcSpcCrd, self._pmuGen, self._P_e, self._P_nue, self._P_numu, self._Pb, self._Detection_P_e, self._Detection_P_nue, self._Detection_P_numu = self.CreateNeutrinos(nuStrt)
 
         return
 
@@ -120,7 +127,7 @@ class NeutrinoEventInstance:
             beta  = Pmu / Emu
             gamma = Emu / NeutrinoEventInstance.__mumass
             v    = beta * NeutrinoEventInstance.__sol
-            Tmax = nuStrt.Circumference() / (gamma * v)
+            Tmax = 10*nuStrt.Circumference() / (gamma * v)
 
             Dcy = MuonDecay.MuonDecay(Tmax=Tmax)
             DcyCoord, pmuGen = self.GenerateDcyPhaseSpace(Dcy, Pmu, nuStrt)
@@ -143,8 +150,15 @@ class NeutrinoEventInstance:
             print("----> P_nue :", P_nue)
             print("----> P_numu:", P_numu)
 
+        R=[DcyCoord[1],DcyCoord[2],DcyCoord[3]]
+
+        Detection_P_e    = self.isDetected(R, P_e[1], nuStrt)
+        Detection_P_nue  = self.isDetected(R, P_nue[1], nuStrt)
+        Detection_P_numu = self.isDetected(R, P_numu[1], nuStrt)
+
+
         del Dcy
-        return ct, DcyCoord, pmuGen, P_e, P_nue, P_numu, Pb
+        return ct, DcyCoord, pmuGen, P_e, P_nue, P_numu, Pb, Detection_P_e, Detection_P_nue, Detection_P_numu
 
 #.. Trace space coordinate generation: array(s, x, y, z, x', y')
     def GenerateDcyPhaseSpace(self, Dcy, Pmu, nuStrt):
@@ -355,6 +369,40 @@ class NeutrinoEventInstance:
         if(debug==1):
           print('Po',Po)
         return Po
+
+##..Checking if a decay is detected        
+    def isDetected(self, R, P, nuStrt):
+
+        HallWallDist   = nuStrt.HallWallDist()        
+        DetHlfWdth     = nuStrt.DetHlfWdth()      
+        DetLngth       = nuStrt.DetLngth()
+        Hall2Det       = nuStrt.Hall2Det()
+        PrdStrghtLngth = nuStrt.ProdStrghtLen()
+ 
+        xdmax        =  DetHlfWdth
+        xdmin        = -DetHlfWdth
+        ydmax        =  DetHlfWdth                                  
+        ydmin        = -DetHlfWdth
+        zd           =  PrdStrghtLngth + HallWallDist + Hall2Det
+        
+        x0 = R[0]
+        y0 = R[1]  
+        z0 = R[2]
+
+        l  = P[0]
+        m  = P[1]  
+        n  = P[2]
+
+        t  =(zd - z0)/n   
+        xd = x0 + t*l      
+        yd = y0 + t*m
+        
+        if (t>0):
+          if (xdmax>=xd>=xdmin) and (ydmax>=yd>=ydmin):
+            return True
+        else:                  
+            return False
+
     
 #--------  get/set methods:
     def getpmu(self):
@@ -377,3 +425,12 @@ class NeutrinoEventInstance:
     
     def getPb(self):
         return deepcopy(self._Pb)
+    
+    def is_e_detected(self):
+        return deepcopy(self._Detection_P_e)
+    
+    def is_nue_detected(self):
+        return deepcopy(self._Detection_P_nue)
+    
+    def is_numu_detected(self):
+        return deepcopy(self._Detection_P_numu)

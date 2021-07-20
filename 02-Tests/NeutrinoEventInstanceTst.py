@@ -118,10 +118,20 @@ Circumference  = nuStrt.Circumference()
 ArcLen         = nuStrt.ArcLen()
 ArcRad         = ArcLen/mth.pi
 
-countPrdStrght=0
-countArc1=0
-countRetStrght=0
-countArc2=0
+detected_e     = 0
+detected_nue   = 0
+detected_numu  = 0
+
+PrdStrght_detected_nue  = 0
+PrdStrght_detected_numu = 0
+Background_detected_nue = 0
+Background_detected_numu= 0
+
+
+countPrdStrght = 0
+countArc1      = 0
+countRetStrght = 0
+countArc2      = 0
 
 if (debug==1):
     print("Soak Test:PrdStrghtLngth, Circumference, ArcLen, ArcRad ",PrdStrghtLngth, Circumference, ArcLen, ArcRad)
@@ -195,6 +205,10 @@ for nuEvt in nuEI:
         PrdStrghtcosnue = np.append(PrdStrghtcosnue,cosnue)
         PrdStrghtcosnumu = np.append(PrdStrghtcosnumu,cosnumu)
         countPrdStrght+=1
+        if nuEvt.is_nue_detected():
+             PrdStrght_detected_nue+=1
+        if nuEvt.is_numu_detected():
+             PrdStrght_detected_numu+=1
     if ((PrdStrghtLngth+ArcLen)>=where>PrdStrghtLngth):
     #if(zi>PrdStrghtLngth):
         if(debug==1):
@@ -203,6 +217,10 @@ for nuEvt in nuEI:
         Arc1cosnue = np.append(Arc1cosnue,cosnue)
         Arc1cosnumu = np.append(Arc1cosnumu,cosnumu)
         countArc1+=1
+        if nuEvt.is_nue_detected():
+             Background_detected_nue+=1
+        if nuEvt.is_numu_detected():
+             Background_detected_numu+=1
     if ((2*PrdStrghtLngth+ArcLen)>=where>(PrdStrghtLngth+ArcLen)):
         if(debug==1):
           print("Soak Test: In the return straight")
@@ -210,6 +228,10 @@ for nuEvt in nuEI:
         RetStrghtcosnue = np.append(RetStrghtcosnue,cosnue)
         RetStrghtcosnumu = np.append(RetStrghtcosnumu,cosnumu)
         countRetStrght+=1
+        if nuEvt.is_nue_detected():
+             Background_detected_nue+=1
+        if nuEvt.is_numu_detected():
+             Background_detected_numu+=1
     if ((2*PrdStrghtLngth+2*ArcLen)>=where>(2*PrdStrghtLngth+ArcLen)):
         if(debug==1):
           print("Soak Test: In the return straight")
@@ -217,7 +239,18 @@ for nuEvt in nuEI:
         Arc2cosnue = np.append(Arc2cosnue,cosnue)
         Arc2cosnumu = np.append( Arc2cosnumu,cosnumu)
         countArc2+=1
-   
+        if nuEvt.is_nue_detected():
+             Background_detected_nue+=1
+        if nuEvt.is_numu_detected():
+             Background_detected_numu+=1
+    if nuEvt.is_e_detected():
+             detected_e+=1
+    if nuEvt.is_nue_detected():
+             detected_nue+=1
+    if nuEvt.is_numu_detected():
+             detected_numu+=1
+
+
     pt_e    = np.sqrt(nuEvt.gete4mmtm()[1][0]**2 + nuEvt.gete4mmtm()[1][1]**2)
     pt_nue  = np.sqrt(nuEvt.getnue4mmtm()[1][0]**2 + nuEvt.getnue4mmtm()[1][1]**2)
     pt_numu = np.sqrt(nuEvt.getnumu4mmtm()[1][0]**2 + nuEvt.getnumu4mmtm()[1][1]**2)
@@ -230,6 +263,15 @@ print("Number of decays after evaluation cos", (countPrdStrght+countArc1+countRe
 print("Number of electrons", len(PrdStrghtcose)+len(Arc1cose)+len(RetStrghtcose)+len(Arc2cose))
 print("Number of electronneutrinos", len(PrdStrghtcosnue)+len(Arc1cosnue)+len(RetStrghtcosnue)+len(Arc2cosnue))
 print("Number of muon neutrinos", len(PrdStrghtcosnumu)+len(Arc1cosnumu)+len(RetStrghtcosnumu)+len(Arc2cosnumu))
+
+#print("Detected electrons", detected_e)
+print("Detected electron neutrinos from the beam in Production straight", PrdStrght_detected_nue)
+print("Detected muon neutrinos from the beam in the Production straight", PrdStrght_detected_numu)
+print("Detected electron neutrinos from the background", Background_detected_nue)
+print("Detected muon neutrinos from the background", Background_detected_numu)
+
+Noise_percentage = 100*(Background_detected_nue + Background_detected_numu)/(PrdStrght_detected_nue + PrdStrght_detected_numu)
+print("Background Noise percentage",Noise_percentage)
 
 countPrdStrght=0
 countArc1=0
@@ -417,7 +459,7 @@ plt.close()
 n, bins, patches = plt.hist(RetStrghtcose, bins=500, color='y', range=(0.99,1))
 plt.xlabel('RetStrghtcose')
 plt.ylabel('Frequency')
-plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the production straight')
+plt.title('Angular distrubution of electron momentum \n with respect to beam direction in the return straight')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot12.pdf')
 plt.close()
 
