@@ -65,7 +65,7 @@ print("NeutrinoEventInstanceTest:", NeutrinoEventInstanceTest, \
 Pmu = 5.
 print("    ----> Muon momentum:", Pmu)
 nuEI = []
-for i in range(10000):
+for i in range(20000):
     if(debug==1):
       print("Number of instance:", i+1)
     nuEI.append(nuEvtInst.NeutrinoEventInstance(Pmu, filename))
@@ -99,6 +99,9 @@ Rnumu   = np.array([])
 CutEnue = np.array([])
 CutEnumu= np.array([])
 
+Cose             = np.array([])
+Cosnue           = np.array([])
+Cosnumu          = np.array([])
 PrdStrghtcose    = np.array([])
 PrdStrghtcosnue  = np.array([])
 PrdStrghtcosnumu = np.array([])
@@ -194,6 +197,10 @@ for nuEvt in nuEI:
     cosnue   = np.dot(Pb,Pnue3)/(np.linalg.norm(Pb)*np.linalg.norm(Pnue3))
     cosnumu  = np.dot(Pb,Pnumu3)/(np.linalg.norm(Pb)*np.linalg.norm(Pnumu3))
     
+    Cose    = np.append(Cose, cose)
+    Cosnue  = np.append(Cosnue, cosnue)
+    Cosnumu = np.append(Cosnumu, cosnumu)
+    
     if(debug==1):
        print("cose; cosnue; cosnumu", cose, cosnue, cosnumu)
 
@@ -270,14 +277,14 @@ print("Detected muon neutrinos from the beam in the Production straight", PrdStr
 print("Detected electron neutrinos from the background", Background_detected_nue)
 print("Detected muon neutrinos from the background", Background_detected_numu)
 
-Noise_percentage = 100*(Background_detected_nue + Background_detected_numu)/(PrdStrght_detected_nue + PrdStrght_detected_numu)
+Noise_percentage = 100*(Background_detected_nue + Background_detected_numu)/(Background_detected_nue + Background_detected_numu + PrdStrght_detected_nue + PrdStrght_detected_numu)
 print("Background Noise percentage",Noise_percentage)
 
 countPrdStrght=0
 countArc1=0
 countRetStrght=0
 countArc2=0
-
+"""
 #-- Lifetime distribution:
 n, bins, patches = plt.hist(s, bins=50, color='y', log=True)
 plt.xlabel('s (m)')
@@ -499,6 +506,30 @@ plt.ylabel('Frequency')
 plt.title('Angular distrubution of muon neutrino momentum \n with respect to beam direction in the second arc')
 plt.savefig('Scratch/NeutrinoEventInstanceTst_plot17.pdf')
 plt.close()
+
+n, bins, patches = plt.hist(Cose, bins=500, color='b', range=(0.99,1))
+plt.xlabel('Cos(Angle between electron direction and beam direction)')
+plt.ylabel('Frequency')
+plt.title('Angular distrubution of electron momentum \n with respect to beam direction')
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot20.pdf')
+plt.close()
+
+n, bins, patches = plt.hist(Cosnue, bins=500, color='b', range=(0.99,1))
+plt.xlabel('Cos(Angle between electron neutrino direction and beam direction)')
+plt.ylabel('Frequency')
+plt.title('Angular distrubution of electron neutrino momentum \n with respect to beam direction')
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot21.pdf')
+plt.close()
+
+n, bins, patches = plt.hist(Cosnumu, bins=500, color='b', range=(0.99,1))
+plt.xlabel('Cos(Angle between muon neutrino direction and beam direction)')
+plt.ylabel('Frequency')
+plt.title('Angular distrubution of muon neutrino momentum \n with respect to beam direction')
+plt.savefig('Scratch/NeutrinoEventInstanceTst_plot22.pdf')
+plt.close()
+
+"""
+
 ##! Complete:
 print()
 print("========  NeutrinoEventInstance: tests complete  ========")
