@@ -269,7 +269,7 @@ class ntupleMake:
 		self.evTree.Fill()
 
 	def fluxFill(self, hitE, hitMu):
-
+		
 		self.flux.nuEx = hitE[0]
 		self.flux.nuEy = hitE[1]
 		self.flux.nuEpx = hitE[5]
@@ -303,11 +303,13 @@ class ntupleMake:
 		self.evTree.Write()
 		self.fluxTree.Write()
 		return
-
-
+		
+		
 	def closeFile(self):
 		self.evTree.Print()
 		self.evTree.Write()
+		self.fluxTree.Print()
+		self.fluxTree.Write()
 		return
 
 	def initNtuple(self, labels):
