@@ -4,11 +4,16 @@
 Class control:
 ==============
 
-  Description of a pion
+  Controls the running of the normalisation application.
+  The initialisation is passed a file name. The file is in json format
+  and contains flags to control the running of the normalisation code.
+  It also gets the current run number stored in run number file. That file
+  is part of a particular analysis campaign and is therefore stored in the
+  directories which define the study. 
+
 
   Class attributes:
 
-  
       
   Instance attributes:
   --------------------
@@ -82,11 +87,15 @@ class control:
 # Process muons outside the acceptance but in the production straight
     def PSMuons(self):
         return (self._controlInfo["flags"]["PSMuons"] == "True")
-
+# Process muons that decay in the ring - after the overlap with the pions in the PS
     def ringMuons(self):
         return (self._controlInfo["flags"]["ringMuons"] == "True")
-
-
+# Generate pencil beam at target
+    def pencilBeam(self):
+        return (self._controlInfo["flags"]["pencilBeam"] == "True")
+# All pions start at t=0
+    def tEqualsZero(self):
+        return (self._controlInfo["flags"]["tEqualsZero"] == "True")
 # Track the flash neutrinos to the detector
     def flashAtDetector(self):
         return (self._controlInfo["flags"]["flashAtDetector"] == "True")
@@ -110,6 +119,11 @@ class control:
 # number of events
     def nEvents(self):
         return self._controlInfo["nEvents"]
+
+# print limit
+    def printLimit(self):
+        return self._controlInfo["printLimit"]
+
 
 # Pion energy
     def EPi(self):
