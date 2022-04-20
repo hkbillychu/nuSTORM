@@ -138,12 +138,13 @@ class histoManager:
 
 # create a tex file with all the plots
 
-    def texCreate(self):
+    def texCreate(self, fileName):
         texHline = "\\hline\n"
         slash = "\\"
 #  Outout the information as a document
-        plotDir = Path.cwd()
-        plotFile = str(Path.cwd())+"/plots.tex"
+#        plotDir = Path.cwd()
+#        plotFile = str(Path.cwd())+"/plots.tex"
+        plotFile = fileName
         print (plotFile)
         f = open(plotFile, "w")
         f.write(slash + "documentclass{article}\n")

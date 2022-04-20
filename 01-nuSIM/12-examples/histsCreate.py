@@ -165,7 +165,7 @@ class histsCreate():
 
 
 
-    def summary(self):
+    def summary(self, fileName):
 
         texHline = "\\hline\n"
         slash = "\\"
@@ -173,8 +173,9 @@ class histsCreate():
         print (self._zeroWeight)
         print (self._NZWeight)
 #  Outout the information as a latex table
-        sumDir = Path.cwd()
-        sumFile = str(Path.cwd())+"/summary.tex"
+#        sumDir = Path.cwd()
+#        sumFile = str(Path.cwd())+"/summary.tex"
+        sumFile = fileName
         print (sumFile)
         f = open(sumFile, "w")
         f.write("\\begin{tabular}{|  l | l | l  | p{9.0cm} | }\n" )
