@@ -103,9 +103,8 @@ class control:
     # a fileName given by the runNumber key word in the dictionary
     #    rNFile = "102-studies/" + self._controlInfo['study'] + "/" +self._controlInfo['runNumber']
         sDir =os.environ['StudyDir']
-        print ("sDir is ", sDir)
-        exit();
-        rNFile = "102-studies/" + self._controlInfo['study'] + "/" +self._controlInfo['runNumber']
+#        rNFile = "102-studies/" + self._controlInfo['study'] + "/" +self._controlInfo['runNumber']
+        rNFile = sDir  + "/" +self._controlInfo['runNumber']
         rN = open(rNFile, "r")
         runNumber = int(rN.readline())
         rN.close()
@@ -131,7 +130,8 @@ class control:
 
 #logFile name
     def logFile(self):
-        return "102-studies/" + self._controlInfo['study'] + "/"+ self._controlInfo["files"]["logFile"] + str(self.runNumber()) + ".log"
+        sDir =os.environ['StudyDir']
+        return sDir + "/" + self._controlInfo['study'] + "/"+ self._controlInfo["files"]["logFile"] + str(self.runNumber()) + ".log"
 
 #plots dictionary file name
     def plotsDict(self):
