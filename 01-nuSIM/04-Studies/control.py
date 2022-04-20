@@ -4,16 +4,11 @@
 Class control:
 ==============
 
-  Controls the running of the normalisation application.
-  The initialisation is passed a file name. The file is in json format
-  and contains flags to control the running of the normalisation code.
-  It also gets the current run number stored in run number file. That file
-  is part of a particular analysis campaign and is therefore stored in the
-  directories which define the study. 
-
+  Description of a pion
 
   Class attributes:
 
+  
       
   Instance attributes:
   --------------------
@@ -39,6 +34,7 @@ Version history:
 """
 
 import math, sys
+import os
 import json
 import numpy as np
 from copy import deepcopy
@@ -105,7 +101,11 @@ class control:
 
     # run number is read from a file, it is in the studies directory a sub directory given by the study name and
     # a fileName given by the runNumber key word in the dictionary
-        rNFile = "101-studies/" + self._controlInfo['study'] + "/" +self._controlInfo['runNumber']
+    #    rNFile = "102-studies/" + self._controlInfo['study'] + "/" +self._controlInfo['runNumber']
+        sDir =os.environ['StudyDir']
+        print ("sDir is ", sDir)
+        exit();
+        rNFile = "102-studies/" + self._controlInfo['study'] + "/" +self._controlInfo['runNumber']
         rN = open(rNFile, "r")
         runNumber = int(rN.readline())
         rN.close()
@@ -131,7 +131,7 @@ class control:
 
 #logFile name
     def logFile(self):
-        return "101-studies/" + self._controlInfo['study'] + "/"+ self._controlInfo["files"]["logFile"] + str(self.runNumber()) + ".log"
+        return "102-studies/" + self._controlInfo['study'] + "/"+ self._controlInfo["files"]["logFile"] + str(self.runNumber()) + ".log"
 
 #plots dictionary file name
     def plotsDict(self):
