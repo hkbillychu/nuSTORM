@@ -478,7 +478,9 @@ if __name__ == "__main__" :
 # Flash from the transfer line
 #    controlFile = "102-Studies/pencilValidation/TLPiFlash.dict"
 # muons from transfer line
-    controlFile = "102-Studies/pencilValidation/TLmuonDecay.dict"
+    StudyDir = os.getenv('StudyDir')
+    StudyName = os.getenv('StudyName')
+    controlFile = os.path.join(StudyDir, "PSPiFLash.dict")
 
     ctrlInst = control.control(controlFile)
     normInst = normalisation()
@@ -535,7 +537,7 @@ if __name__ == "__main__" :
     nuSIMPATH = os.getenv('nuSIMPATH')
     filename  = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
     print ("filename " , filename)
-    rootFilename = os.path.join(nuSIMPATH, 'Scratch/normalisation'+str(runNumber)+'.root')
+    rootFilename = os.path.join(StudyDir, StudyName, 'normalisation' + str(ctrlInst.runNumber())+'.root')
     trfCmplxFile = os.path.join(nuSIMPATH, '11-Parameters/nuSTORM-TrfLineCmplx-Params-v1.0.csv')
     print ("ftrfCmplxFile " , trfCmplxFile)
     print ("numSIMPATH, filename, rootfilename, trfCmplxFile \n", nuSIMPATH, "\n", filename, "\n", rootFilename,
@@ -634,7 +636,9 @@ for event in range(nEvents):
 eH.write()
 eH.outFileClose()
 # Write out histograms
-hm.histOutRoot("normalPlots.root")
+fileName = os.path.join(StudyDir, ctrlInst.studyName() + "/Normalplots" + str(ctrlInst.runNumber()) + ".root")
+print (fileName)
+hm.histOutRoot(fileName)
 ##! Complete:
 print()
 print("========  Normalisation run : complete  ========")
