@@ -26,9 +26,9 @@ class histsCreate():
         self._count = 0
         self._targetWeight = 0
         self._targetNoWeight = 0
-        self._NZWeight = {"target":0, "productionStraight": 0, "pionDecay": 0, "muonProduction": 0,"piFlashNu": 0,
+        self._NZWeight = {"target":0, "productionStraight": 0, "prodStraightEnd": 0, "pionDecay": 0, "muonProduction": 0,"piFlashNu": 0,
                 "muonDecay": 0, "eProduction": 0, "numuProduction":0, "nueProduction": 0, "numuDetector": 0, "nueDetector": 0}
-        self._zeroWeight = {"target":0, "productionStraight": 0, "pionDecay": 0, "muonProduction": 0,"piFlashNu": 0,
+        self._zeroWeight = {"target":0, "productionStraight": 0, "prodStraightEnd": 0, "pionDecay": 0, "muonProduction": 0,"piFlashNu": 0,
                 "muonDecay": 0, "eProduction": 0, "numuProduction":0, "nueProduction": 0, "numuDetector": 0, "nueDetector": 0}
 
 #  read in the dictionaries
@@ -184,6 +184,7 @@ class histsCreate():
         f.write(texHline )
         f.write("target                   & " + str(self._zeroWeight['target']) + " & " + str(self._NZWeight['target']) + " &\\\\ \n")
         f.write("productionStraight       & " + str(self._zeroWeight['productionStraight']) + " & " + str(self._NZWeight['productionStraight']) + " &\\\\ \n")
+        f.write("prodStraightEnd          & " + str(self._zeroWeight['prodStraightEnd']) + " & " + str(self._NZWeight['prodStraightEnd']) + " &\\\\ \n")
         f.write("pionDecay                & " + str(self._zeroWeight['pionDecay']) + " & " + str(self._NZWeight['pionDecay']) + " &\\\\ \n")
         f.write("muonProduction           & " + str(self._zeroWeight['muonProduction']) + " & " + str(self._NZWeight['muonProduction']) + " &\\\\ \n")
         f.write("piFlashNu                & " + str(self._zeroWeight['piFlashNu']) + " & " + str(self._NZWeight['piFlashNu']) + " &\\\\ \n")

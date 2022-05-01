@@ -99,6 +99,7 @@ hmDataOut = histoManager.histoManager()
 hC = histsCreate.histsCreate(hm, ctrlInst.plotsDict())
 hC.histAdd("target")
 hC.histAdd("productionStraight")
+hC.histAdd("prodStraightEnd")
 hC.histAdd("pionDecay")
 hC.histAdd("muonProduction")
 hC.histAdd("piFlashNu")
@@ -174,6 +175,10 @@ for pnt in range(nEvent):
     partPS = objRd.findParticle("productionStraight")
     hC.histsFill("productionStraight", partPS)
     if (dbgFlag): print ("productionStraight Particle is ", partPS)
+
+    partPSEnd = objRd.findParticle("prodStraightEnd")
+    hC.histsFill("prodStraightEnd", partPSEnd)
+    if (dbgFlag): print ("prodStraightEnd Particle is ", partPSEnd)
 
     partPD = objRd.findParticle("pionDecay")
     hC.histsFill("pionDecay", partPD)

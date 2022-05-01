@@ -12,6 +12,12 @@ Model for calculating normalised numbers
 
     @author  Paul Kyberd
 
+
+    Add the event history at the end of the production straight
+    @version     1.2
+    @date        07 January 2021
+
+
     Add python logging
     @version     1.1
     @date        07 January 2021
@@ -242,6 +248,20 @@ class normalisation:
       eMu = mu[0]
       muProd = particle.particle(runNumber, event, sd, xd, yd, zd, pxMu, pyMu, pzMu, td, eventWeight, "mu+")
       eH.addParticle("muonProduction", muProd)
+# extraoplate the muon to the end of the production straight
+      dZ = psLength - zd
+      zEnd = psLength
+      xEnd = xd + dZ*pxMu/pzMu
+      yEnd = yd + dZ*pyMu/pzMu
+      sEnd = tlCmplxLength + psLength
+      dFlown = math.sqrt((xEnd-xd)*(xEnd-xd) + (yEnd-yd)*(yEnd-yd) + dZ*dZ)
+      muVel = math.sqrt(pxMu*pxMu + pyMu*pyMu + pzMu*pzMu)*c/eMu
+      tFlown = dFlown/muVel
+      tEnd = td + tFlown
+      muEnd = particle.particle(runNumber, event, sEnd, xEnd, yEnd, zEnd, pxMu, pyMu, pzMu, tEnd, eventWeight, "mu+")
+      eH.addParticle("prodStraightEnd", muEnd)
+
+
       if (self._PSDcyCount < printLimit): print ("muonProduction in production straight")
 # add the pion flash neutrino
       numu = pi.getnumu4mmtm()
