@@ -500,7 +500,7 @@ if __name__ == "__main__" :
 # muons from transfer line
     StudyDir = os.getenv('StudyDir')
     StudyName = os.getenv('StudyName')
-    controlFile = os.path.join(StudyDir, "PSPiFLash.dict")
+    controlFile = os.path.join(StudyDir, StudyName, "PSPiFLash3.dict")
 
     ctrlInst = control.control(controlFile)
     normInst = normalisation()
