@@ -8,12 +8,12 @@ Class control:
 
   Class attributes:
 
-  
-      
+
+
   Instance attributes:
   --------------------
- 
-    
+
+
   Methods:
   --------
   Built-in methods __new__, __repr__ and __str__.
@@ -22,7 +22,7 @@ Class control:
       __str__  : Dump the conditions
 
   Get/set methods:
-  
+
   General methods:
 
 Version history:
@@ -42,10 +42,10 @@ import traceSpace
 import MuonConst as mC
 import PionConst as piC
 
-    
+
 class control:
     __Debug  = False
-    
+
 #--------  "Built-in methods":
 
     def __init__(self, controlFile):
@@ -76,7 +76,7 @@ class control:
     def lstFlag(self):
         return (self._controlInfo["flags"]["lstFlag"] == "True")
 
-# Process muon decays 
+# Process muon decays
     def muDcyFlag(self):
         return (self._controlInfo["flags"]["muDcyFlag"] == "True")
 
@@ -96,7 +96,7 @@ class control:
     def flashAtDetector(self):
         return (self._controlInfo["flags"]["flashAtDetector"] == "True")
 
-# run number 
+# run number
     def runNumber(self, inc=False):
 
     # run number is read from a file, it is in the studies directory a sub directory given by the study name and

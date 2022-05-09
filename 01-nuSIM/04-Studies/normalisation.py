@@ -48,7 +48,7 @@ import eventHistory as eventHistory
 
 class normalisation:
 
-    __version__ = 1.0
+    __version__ = 1.1
     def __init__(self):
         self._tlDcyCount = 0
         self._byndPSCount = 0
@@ -231,7 +231,7 @@ class normalisation:
       pyd = pPion*ypd
       pzd = np.sqrt(pPion*pPion - pxd**2 - pyd**2)
       pionPSDecay = particle.particle(runNumber, event, sd, xd, yd, zd, pxd, pyd, pzd, td, eventWeight, "pi+")
-      if (td < 150.0): 
+      if (td < 150.0):
         print ("error in the time")
       hTotal.Fill(td)
       hLifetime.Fill(piLifetime)
@@ -353,7 +353,7 @@ class normalisation:
             eProd = particle.particle(runNumber, event, sDcy, xDcy, yDcy, zDcy, e3mmtm[0], e3mmtm[1], e3mmtm[2], tDcy, eventWeight, 'e+')
             eH.addParticle('eProduction', eProd)
             if (self._muDcyCount < printLimit): print ("eProduction is ", eProd)
-  
+
 # numu production
             numu4mmtm = nuEvt.getnumu4mmtm()
             numu3mmtm = numu4mmtm[1]
@@ -363,7 +363,7 @@ class normalisation:
             numuProd = particle.particle(runNumber, event, sDcy, xDcy, yDcy, zDcy, numu3mmtm[0], numu3mmtm[1], numu3mmtm[2], tDcy, eventWeight, 'numuBar')
             eH.addParticle('numuProduction', numuProd)
             if (self._muDcyCount < printLimit): print ("numuProduction is ", numuProd)
- 
+
 # nue production
             nue4mmtm = nuEvt.getnue4mmtm()
             nue3mmtm = nue4mmtm[1]
@@ -533,7 +533,7 @@ if __name__ == "__main__" :
     PSMuonsFlag = ctrlInst.PSMuons()
     ringMuonsFlag = ctrlInst.ringMuons()
     tEqualsZeroFlag = ctrlInst.tEqualsZero()
- 
+
     print (f"Processing flags -- tlflag: {tlFlag} / psFlag: {psFlag} / lstFlag: {lstFlag} / muDcyFlag: {muDcyFlag} / FlshAtDetFlg: \
         {FlshAtDetFlg} / PSMuonsFlag: {PSMuonsFlag} / ringMuonsFlag {ringMuonsFlag}")
     logging.info("Processing flags -- tlflag: %s,  psFlag: %s,  lstFlag: %s,  muDcyFlag: %s, FlshAtDetFlg: %s, PSMuonsFlag: %s, ringMuonsFlag: %s", \
@@ -621,7 +621,7 @@ for event in range(nEvents):
 # t = d/(beta*c)
       Epion = math.sqrt(pPion**2 + piMass**2)
       te = t + 1E9*se*Epion/(c*pPion)
-# x local is the same as before. 
+# x local is the same as before.
       pionPS = particle.particle(runNumber, event, se, xl, yl, ze, pxl, pyl, pzl, te, eventWeight, "pi+")
       eH.addParticle("productionStraight", pionPS)
 # decay beyond the end of the production straight
