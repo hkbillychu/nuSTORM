@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-#	Initialises things to run a nuSIM study.
+#	Initialises things to run a nuSIM study. 
 #	First time it is run it sets up the whole system and
 #	creates an empty file nuSIM.init.
 #	On subsequent runs it checks for the existance of the
@@ -21,13 +21,8 @@ if test -f "$initFile"; then
 	# still need to set the StudyDir
 	StudyDir="$PWD"
 	export StudyDir
-	if [[ ${1} == '--studyname' ]]; then
-		StudyName=${2}
-		echo "Study name parsed... Study Name: ${StudyName}"
-	else
-		echo What is the name of the study?
-		read StudyName
-	fi
+	echo What is the name of the study 
+	read StudyName
 	if test -d "$StudyName"; then
 		export StudyName
 	else
@@ -46,13 +41,9 @@ else
 	ln -sf ${nuSIMPATH}/runNumber runNumber
 
 	# now get the name of the study
-	if [[ ${1} == '--studyname' ]]; then
-		StudyName=${2}
-		echo "Study name parsed... Study Name: ${StudyName}"
-	else
-		echo What is the name of the study?
-		read StudyName
-	fi
+
+	echo What is the name of the study 
+	read StudyName
 	mkdir $StudyName
 	export StudyName
 
@@ -65,8 +56,8 @@ else
 	mv PSPiFlash.dict.tmp PSPiFlash.dict
 	# copy across a plots control file for Pi and mu in the production straight
 	cp $nuSIMPATH/04-Studies/plotsPSPiFlash.dict $StudyName/
-
-	# copy across a control file for Pi decay in the production straight and muon decay in the ring:
+	
+	# copy across a control file for Pi decay in the production straight and muon decay in the ring: 
 	#		muon signal
 	cp $nuSIMPATH/04-Studies/MuRingDcy.dict .
 	sed "s/<studyname>/$StudyName/" MuRingDcy.dict > MuRingDcy.dict.tmp
@@ -77,8 +68,8 @@ else
 	# copy across a plots control file for Pi and mu in the production straight
 	cp $nuSIMPATH/04-Studies/plotsMuRingDcy.dict $StudyName/
 
-
-	# copy across a control file for muon decay in the production straight. pion flash neutrnios ignored:
+	
+	# copy across a control file for muon decay in the production straight. pion flash neutrnios ignored: 
 	#		muon background
 	cp $nuSIMPATH/04-Studies/PSMuDcy.dict .
 	sed "s/<studyname>/$StudyName/" PSMuDcy.dict > PSMuDcy.dict.tmp
