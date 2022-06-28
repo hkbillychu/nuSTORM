@@ -162,7 +162,6 @@ class normalisation:
     def beyondPS(self):
 
       self._byndPSCount = self._byndPSCount + 1
-
       # extraoplate the muon to the end of the production straight
       tscTrgtLcl = pi.getLclTraceSpaceCoord()
       xtl  = tscTrgtLcl[1]
@@ -197,7 +196,6 @@ class normalisation:
       td = pi.getLifetime()*1E9 + t
       if (self._byndPSCount < printLimit): print ("pi in beyondPS: decayLength ", sd)
       pionLostDecay = particle.particle(runNumber, event, sd, xd, yd, zd, pxd, pyd, pzd, td, eventWeight, "pi+")
-      #print("beyond:PS about to add a pion")
       eH.addParticle("pionDecay", pionLostDecay)
       if (self._byndPSCount < printLimit):  print ("at pionDecay lost")
 # add the pion flash neutrino ... set everything to zero - including eventWeight
@@ -295,8 +293,6 @@ class normalisation:
       muVel = math.sqrt(pxMu*pxMu + pyMu*pyMu + pzMu*pzMu)*c/eMu
       tFlown = dFlown/muVel
       tEnd = td + tFlown
-
-
       muTSC = nuEvt.getTraceSpaceCoord()
       sDcy = muTSC[0]
       if (sDcy > tlCmplxLength+psLength):
@@ -341,6 +337,7 @@ class normalisation:
 # Muon decays -------------------------------------------------
 #
     def decayMuons(self):
+
 # ... We can allow any muon which is created in the production straight to decay without worrying about
 # ... acceptance
 
