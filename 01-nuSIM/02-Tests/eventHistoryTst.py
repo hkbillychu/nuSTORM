@@ -13,6 +13,11 @@ Test script for eventHistory class
 
     @author  Paul Kyberd
 
+    @version    1.3
+    @date       01 July 2022
+    Add numuRSD and nueRSD
+
+
     @version    1.1
     @date       29 April 2022
     Add prodStraightEnd
@@ -216,6 +221,14 @@ descriptions.append(descString)
 locations.append('nueDetector')
 descString = "Check addParticle and findParticle - with '"+locations[-1]+"' location"
 descriptions.append(descString)
+#
+locations.append('numuRSD')
+descString = "Check addParticle and findParticle - with '"+locations[-1]+"' location"
+descriptions.append(descString)
+#
+locations.append('nueRSD')
+descString = "Check addParticle and findParticle - with '"+locations[-1]+"' location"
+descriptions.append(descString)
 
 runNum = 43
 eventNum = 67
@@ -269,6 +282,8 @@ testParticle8 = particle.particle(runNum, eventNum, x, y, z, s, px, py, pz, t, e
 testParticle9 = particle.particle(runNum, eventNum, x, y, z, s, px, py, pz, t, eventWeight,  "numuBar")
 testParticle10 = particle.particle(runNum, eventNum, x, y, z, s, px, py, pz, t, eventWeight, "pi+")
 testParticle11 = particle.particle(runNum, eventNum, x, y, z, s, px, py, pz, t, eventWeight, "pi-")
+testParticle12 = particle.particle(runNum, eventNum, x, y, z, s, px, py, pz, t, eventWeight, "numu")
+testParticle13 = particle.particle(runNum, eventNum, x, y, z, s, px, py, pz, t, eventWeight, "nue")
 obj.addParticle("target", testParticle)
 obj.addParticle("productionStraight", testParticle1)
 obj.addParticle("prodStraightEnd", testParticle2)
@@ -281,6 +296,8 @@ obj.addParticle("numuProduction", testParticle8)
 obj.addParticle("nueProduction", testParticle9)
 obj.addParticle("numuDetector", testParticle10)
 obj.addParticle("nueDetector", testParticle11)
+obj.addParticle("numuRSD", testParticle12)
+obj.addParticle("nueRSD", testParticle13)
 
 obj.display()
 

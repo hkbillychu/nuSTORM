@@ -38,7 +38,8 @@ Methods:
 		findParticle(location, par): return particle par at location from the history
 
 
-
+Version 1.3 									29/06/2022
+Entries for numu and nue on the return straight detector
 
 Version 1.2 									29/04/2022
 Add a point at the end of the production straight
@@ -274,9 +275,43 @@ gROOT.ProcessLine(
    Float_t			mass;\
 };" );
 
+gROOT.ProcessLine(
+"struct numuRSD {\
+   Int_t				runNumber;\
+   Int_t				eventNumber;\
+   Int_t				pdgCode;\
+   Float_t			x;\
+   Float_t			y;\
+   Float_t			z;\
+   Float_t			s;\
+   Float_t			px;\
+   Float_t			py;\
+   Float_t			pz;\
+   Float_t			t;\
+   Float_t			eventWeight;\
+   Float_t			mass;\
+};" );
+
+gROOT.ProcessLine(
+"struct nueRSD {\
+   Int_t				runNumber;\
+   Int_t				eventNumber;\
+   Int_t				pdgCode;\
+   Float_t			x;\
+   Float_t			y;\
+   Float_t			z;\
+   Float_t			s;\
+   Float_t			px;\
+   Float_t			py;\
+   Float_t			pz;\
+   Float_t			t;\
+   Float_t			eventWeight;\
+   Float_t			mass;\
+};" );
+
 
 class eventHistory:
-	Version = 1.0
+	Version = 1.3
 	__Validated__ = False
 
 # built in methods
@@ -285,7 +320,7 @@ class eventHistory:
 		self._inputFilename = "null"
 		self._eHTree = "null"
 		self._runNum = -1
-		self._particles = [None]*12
+		self._particles = [None]*14
 		self.evTree = TTree('eventHistory', 'nuStorm Event')
 		self._entryPnt = 0
 
@@ -316,6 +351,8 @@ class eventHistory:
 		self.addParticle("nueProduction", testParticle)
 		self.addParticle("numuDetector", testParticle)
 		self.addParticle("nueDetector", testParticle)
+		self.addParticle("numuRSD", testParticle)
+		self.addParticle("nueRSD", testParticle)
 
 #  Name and open a file for output
 	def outFile(self, fileName ):
@@ -352,6 +389,10 @@ class eventHistory:
 		self._eHTree.SetBranchAddress("numuDetector", self.numuDetector)
 		self.nueDetector = ROOT.nueDetector()
 		self._eHTree.SetBranchAddress("nueDetector", self.nueDetector)
+		self.numuRSD = ROOT.numuRSD()
+		self._eHTree.SetBranchAddress("numuRSD", self.numuRSD)
+		self.nueRSD = ROOT.nueRSD()
+		self._eHTree.SetBranchAddress("nueRSD", self.nueRSD)
 
 	def getEntries(self):
 		return self._eHTree.GetEntries()
@@ -412,6 +453,14 @@ class eventHistory:
 			self.nueDetector.x, self.nueDetector.y, self.nueDetector.z, self.nueDetector.px, self.nueDetector.py, self.nueDetector.pz,
 			self.nueDetector.t, self.nueDetector.eventWeight, self.nueDetector.pdgCode)
 
+		pNumuRSD = particle.particle(self.numuRSD.runNumber, self.numuRSD.eventNumber, self.numuRSD.s,
+			self.numuRSD.x, self.numuRSD.y, self.numuRSD.z, self.numuRSD.px, self.numuRSD.py, self.numuRSD.pz,
+			self.numuRSD.t, self.numuRSD.eventWeight, self.numuRSD.pdgCode)
+		pNueRSD = particle.particle(self.nueRSD.runNumber, self.nueRSD.eventNumber, self.nueRSD.s,
+			self.nueRSD.x, self.nueRSD.y, self.nueRSD.z, self.nueRSD.px, self.nueRSD.py, self.nueRSD.pz,
+			self.nueRSD.t, self.nueRSD.eventWeight, self.nueRSD.pdgCode)
+
+
 		self.addParticle('target', pTar)
 		self.addParticle('productionStraight', pPs)
 		self.addParticle('prodStraightEnd', pPsEnd)
@@ -424,6 +473,8 @@ class eventHistory:
 		self.addParticle('nueProduction', pNuePrd)
 		self.addParticle('numuDetector', pNumuDet)
 		self.addParticle('nueDetector', pNueDet)
+		self.addParticle('numuRSD', pNumuRSD)
+		self.addParticle('nueRSD', pNueRSD)
 		self._entryPnt = self._entryPnt + 1
 
 	def rootStructure(self):
@@ -452,6 +503,10 @@ class eventHistory:
 		self.evTree.Branch('numuDetector', self.numuDetector, 'run/I:event:pdgCode:x/F:y:z:s:px:py:pz:t:eventWeight:mass')
 		self.nueDetector = ROOT.nueDetector()
 		self.evTree.Branch('nueDetector', self.nueDetector, 'run/I:event:pdgCode:x/F:y:z:s:px:py:pz:t:eventWeight:mass')
+		self.numuRSD = ROOT.numuRSD()
+		self.evTree.Branch('numuRSD', self.numuRSD, 'run/I:event:pdgCode:x/F:y:z:s:px:py:pz:t:eventWeight:mass')
+		self.nueRSD = ROOT.nueRSD()
+		self.evTree.Branch('nueRSD', self.nueRSD, 'run/I:event:pdgCode:x/F:y:z:s:px:py:pz:t:eventWeight:mass')
 # and create the history array
 		self.makeHistory()
 
@@ -653,6 +708,38 @@ class eventHistory:
 		self.nueDetector.eventWeight = self._particles[partPnt].weight()
 		self.nueDetector.mass = self._particles[partPnt].mass()
 
+# numu RSD
+		partPnt = partPnt + 1
+		self.numuRSD.runNumber = self._particles[partPnt].run()
+		self.numuRSD.eventNumber = self._particles[partPnt].event()
+		self.numuRSD.pdgCode = self._particles[partPnt].pdgCode()
+		self.numuRSD.x = self._particles[partPnt].x()
+		self.numuRSD.y = self._particles[partPnt].y()
+		self.numuRSD.z = self._particles[partPnt].z()
+		self.numuRSD.s = self._particles[partPnt].s()
+		self.numuRSD.px = self._particles[partPnt].p()[1][0]
+		self.numuRSD.py = self._particles[partPnt].p()[1][1]
+		self.numuRSD.pz = self._particles[partPnt].p()[1][2]
+		self.numuRSD.t = self._particles[partPnt].t()
+		self.numuRSD.eventWeight = self._particles[partPnt].weight()
+		self.numuRSD.mass = self._particles[partPnt].mass()
+
+# nue RSD
+		partPnt = partPnt + 1
+		self.nueRSD.runNumber = self._particles[partPnt].run()
+		self.nueRSD.eventNumber = self._particles[partPnt].event()
+		self.nueRSD.pdgCode = self._particles[partPnt].pdgCode()
+		self.nueRSD.x = self._particles[partPnt].x()
+		self.nueRSD.y = self._particles[partPnt].y()
+		self.nueRSD.z = self._particles[partPnt].z()
+		self.nueRSD.s = self._particles[partPnt].s()
+		self.nueRSD.px = self._particles[partPnt].p()[1][0]
+		self.nueRSD.py = self._particles[partPnt].p()[1][1]
+		self.nueRSD.pz = self._particles[partPnt].p()[1][2]
+		self.nueRSD.t = self._particles[partPnt].t()
+		self.nueRSD.eventWeight = self._particles[partPnt].weight()
+		self.nueRSD.mass = self._particles[partPnt].mass()
+
 # write out
 		self.evTree.Fill()
 
@@ -698,6 +785,10 @@ class eventHistory:
 			self._particles[10] = par
 		elif location == "nueDetector":
 			self._particles[11] = par
+		elif location == "numuRSD":
+			self._particles[12] = par
+		elif location == "nueRSD":
+			self._particles[13] = par
 		else:
 			print ("unrecognised point on the history .. adding a particle", location)
 			sys.exit(0)
@@ -728,6 +819,10 @@ class eventHistory:
 			return deepcopy(self._particles[10])
 		elif location == "nueDetector":
 			return deepcopy(self._particles[11])
+		elif location == "numuRSD":
+			return deepcopy(self._particles[12])
+		elif location == "nueRSD":
+			return deepcopy(self._particles[13])
 
 		else:
 			print ("unrecognised point on the history .. finding a particle", location)
@@ -748,3 +843,5 @@ class eventHistory:
 		print("nue Production ", self._particles[9])
 		print("numu at Detector ", self._particles[10])
 		print("nue at Detector ", self._particles[11])
+		print("numu at RSD ", self._particles[10])
+		print("nue at RSD ", self._particles[11])
