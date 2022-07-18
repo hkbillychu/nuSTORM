@@ -180,6 +180,28 @@ if (tS != tS2):
 else:
     print("not equals fails.")
 
+##! Create default instance and check
+traceSpaceTest = 4
+print()
+print("traceSpaceTest:", traceSpaceTest, " Check equals and not equals for default constructor.")
+tS = trSp.traceSpace()
+tS1 = trSp.traceSpace(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+if (tS == tS1):
+    pass
+else:
+    print("equality fails.")
+    testError = testError + 1
+
+tS2 = trSp.traceSpace(0.1, 0.0, 0.0, 0.0, 0.0, 0.0)
+if (tS != tS2):
+    pass
+else:
+    print("non-equality fails.")
+    testError = testError + 1
+
+
+
 ##! Complete:
 print()
 print("========  traceSpace:tests complete   ========")

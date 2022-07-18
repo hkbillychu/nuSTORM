@@ -36,6 +36,7 @@ Created on Tue 20Aug12: Version history:
 ----------------------------------------------
  1.0: 20Aug21: First implementation
  1.1: 22Aug21: Add __eq__ and __ne__ methods
+ 2.0: 18Jul22: Add a default constructor
 
 @author: PaulKyberd
 """
@@ -46,10 +47,10 @@ import sys
 class traceSpace:
 
     __Debug  = False
-    __version = 1.0
+    __version = 2.0
     
 #--------  "Built-in methods":
-    def __init__(self, s, x, y, z, xp, yp):
+    def __init__(self, s=0.0, x=0.0, y=0.0, z=0.0, xp=0.0, yp=0.0):
 
         self._s  = s
         self._x  = x
