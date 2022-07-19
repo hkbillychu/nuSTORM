@@ -106,7 +106,7 @@ class NeutrinoEventInstance:
     __Debug  = False
 
 #--------  "Built-in methods":
-    def __init__(self, pmu=5., muProdTSC=[0.,0.,0.,0.,0.], filename=None):
+    def __init__(self, pmu=5., muProdTSC=[0.,0.,0.,0.,0.,0.], filename=None):
 
         nuStrt = nuPrdStrt.nuSTORMPrdStrght(filename)
 
@@ -114,6 +114,8 @@ class NeutrinoEventInstance:
 
         self._pmu = pmu
         self._muProdTSC = muProdTSC
+        if NeutrinoEventInstance.__Debug:
+            print(f"    ----> neutrinoEvent Instance muProdTSC {self._muProdTSC}")
         self._ct, self._TrcSpcCrd, self._pmuGen, self._pmuDirCos,  \
             self._P_e, self._P_nue, self._P_numu \
                 = self.CreateNeutrinos(nuStrt)
@@ -145,22 +147,28 @@ class NeutrinoEventInstance:
         ArcRad         = ArcLen / math.pi
 
         if NeutrinoEventInstance.__Debug:
-           print(" NeutrinoEventInstance.CreateNeutrinos: entered")
+           print("    ----> CreateNeutrinos: entered")
 
         #.. Prepare--get neutrino decay instance in muon rest frame:
         z = 2.* PrdStrghtLngth
         Dcy = 0
         if NeutrinoEventInstance.__Debug:
-            print("    ----> Find valid decay")
+            print("    ----> CreateNeutrinos: Find valid decay")
 
         if isinstance(Dcy, MuonDecay.MuonDecay):
             del Dcy
         Dcy = MuonDecay.MuonDecay()
+        if NeutrinoEventInstance.__Debug:
+            print(f"    ----> CreateNeutrinos: Dcy is {Dcy}")
 
         Pmu0             = self.getpmu()
         #PmuGen           = nuStrt.GeneratePiMmtm(Pmu0)
         PmuGen           = Pmu0
         DcyCoord, DirCos = self.GenerateDcyPhaseSpace(Dcy, PmuGen, nuStrt)
+        if NeutrinoEventInstance.__Debug:
+            print(f"    ----> CreateNeutrinos: DcyCoord {DcyCoord}")
+            print(f"    ----> CreateNeutrinos: DirCos {DirCos}")
+
 
         z  = DcyCoord[3]
         ct = Dcy.getLifetime()
@@ -170,19 +178,19 @@ class NeutrinoEventInstance:
         #     print("     ----> !!!! CreateNeutrinos Alarm:", z)
 
         if NeutrinoEventInstance.__Debug:
-            print("    ----> Muon production at s =", self._muProdTSC[0])
-            print("    ----> Muon decay at s =", s)
+            print("    ----> CreateNeutrinos: Muon production at s =", self._muProdTSC[0])
+            print("    ----> CreateNeutrinos: Muon decay at s =", s)
 
         if NeutrinoEventInstance.__Debug:
-            print("    ----> Rotate and boost to nuSTORM rest frame")
+            print("    ----> CreateNeutrinos: Rotate and boost to nuSTORM rest frame")
 
         P_e, P_nue, P_numu = self.Boost2nuSTORM(Dcy, PmuGen, DirCos)
 
         if NeutrinoEventInstance.__Debug:
-            print("     ----> Decay products in nuSTORM frame:")
-            print("         ----> P_e   :", P_e)
-            print("         ----> P_nue :", P_nue)
-            print("         ----> P_numu:", P_numu)
+            print("         ----> CreateNeutrinos: Decay products in nuSTORM frame:")
+            print("         ----> CreateNeutrinos: P_e   :", P_e)
+            print("         ----> CreateNeutrinos: P_nue :", P_nue)
+            print("         ----> CreateNeutrinos: P_numu:", P_numu)
 
         del Dcy
 
@@ -193,8 +201,12 @@ class NeutrinoEventInstance:
 
         coord = np.array([0., 0., 0., 0., 0., 0.])
 
-        #.. longitudinal position, "s", z:
+        #.. longitudinal position, "s", z: - coord[0] then contains the parh length for the decay lifetime at the
+        #..  appropriate mometum and then add the s position of the pion decay - this should automatically include
+        #..  the length of the transfer line
         coord[0] = self.GenerateLongiPos(Dcy, Pmu) + self._muProdTSC[0]
+        if NeutrinoEventInstance.__Debug:
+            print(f"         ----> GenerateLongiPos: coord[0] {coord[0]}")
 
         R, Rinv, BeamPos, theta = self.BeamDir(coord[0], Pmu)
 
@@ -204,7 +216,7 @@ class NeutrinoEventInstance:
 
         coord[2] = y + BeamPos[1]
 
-        coord[3] = BeamPos[2] + self._muProdTSC[3]
+        coord[3] = BeamPos[2]
 
         coord[4] = xp
         coord[5] = yp
@@ -218,9 +230,9 @@ class NeutrinoEventInstance:
         p1    = R.dot(p0)
 
         if NeutrinoEventInstance.__Debug:
-            print("         ----> Direction cosines from trace space: ", p0)
-            print("         ----> R: ",  R[0], R[1], R[2])
-            print("         ----> Direction cosines rotated: ", p1)
+            print("         ----> GenerateDcyPhaseSpace: Direction cosines from trace space: ", p0)
+            print("         ----> GenerateDcyPhaseSpace: R: ",  R[0], R[1], R[2])
+            print("         ----> GenerateDcyPhaseSpace: Direction cosines rotated: ", p1)
 
         return coord, p1
 
@@ -233,6 +245,8 @@ class NeutrinoEventInstance:
         v    = beta * NeutrinoEventInstance.__sol
 
         s   = v * gamma * Dcy.getLifetime()
+        if NeutrinoEventInstance.__Debug:
+            print(f"         ----> GenerateLongiPos: s for the muon: {s}")
 
         return s
 
@@ -245,17 +259,21 @@ class NeutrinoEventInstance:
 
         #s_ring takes into account that s = 0. at target and s=z for production straight entrance
         s_ring         = s-tlCmplxLength
+        if NeutrinoEventInstance.__Debug:
+            print(f"         ----> BeamDir: the muon decays at s_ring {s_ring}")
+
         #where corresponds to location within the ring
         if (s_ring <= 0.):
             where      = s_ring
         else:
             where      = s_ring%Circumference
         ArcRad         = ArcLen/math.pi
+        if NeutrinoEventInstance.__Debug:
+            print(f"         ----> BeamDir: at s_ring%Circumference {where}")
 
         if ( 0. >= where):
             if NeutrinoEventInstance.__Debug:
-                print("         ---->", \
-                      "BeamDir: the muon decays in the transfer line complex")
+                print("         ----> BeamDir: the muon decays in the transfer line complex")
 
             theta         =  self._tlAngle          #Angle with respect to Z axis
             z             =  math.cos(theta)*where
@@ -265,16 +283,14 @@ class NeutrinoEventInstance:
 
         elif ( PrdStrghtLngth >= where > 0.):
             if NeutrinoEventInstance.__Debug:
-                print("         ---->", \
-                      "BeamDir: the muon decays in the production straight")
+                print("         ----> BeamDir: the muon decays in the production straight")
 
             theta         = 0.     #Angle with respect to Z axis
             BeamPos       = [0., 0., where]
 
         elif (PrdStrghtLngth+ArcLen >= where > PrdStrghtLngth):
             if NeutrinoEventInstance.__Debug:
-                print("         ---->", \
-                      "BeamDir: the muon decays in the first arc")
+                print("         ----> BeamDir: the muon decays in the first arc")
 
             ArcLenCovered = where - PrdStrghtLngth
             theta         = math.pi*ArcLenCovered/ArcLen
@@ -285,8 +301,7 @@ class NeutrinoEventInstance:
 
         elif (2*PrdStrghtLngth+ArcLen >= where > PrdStrghtLngth+ArcLen):
             if NeutrinoEventInstance.__Debug:
-                print("         ---->", \
-                      "BeamDir: the muon decays in the return straight")
+                print("         ----> BeamDir: the muon decays in the return straight")
 
             theta         = math.pi
             BeamPos       = [2.*ArcRad, \
@@ -295,8 +310,7 @@ class NeutrinoEventInstance:
 
         elif (2*PrdStrghtLngth+2*ArcLen>=where>=2*PrdStrghtLngth+ArcLen):
             if NeutrinoEventInstance.__Debug:
-                print("         ---->", \
-                      "BeamDir: the muon decays in the second/return arc")
+                print("         ----> BeamDir: the muon decays in the second/return arc")
 
             ArcLenCovered = where - 2*PrdStrghtLngth - ArcLen
             theta         = math.pi + math.pi*ArcLenCovered/ArcLen
@@ -316,7 +330,7 @@ class NeutrinoEventInstance:
                           [math.sin(theta),  0., math.cos(theta)]])
 
         if NeutrinoEventInstance.__Debug:
-            print('               ----> theta, s:', theta, s)
+            print('         ----> BeamDir: theta, s:', theta, s)
 
         return R, Rinv, BeamPos, theta
 
