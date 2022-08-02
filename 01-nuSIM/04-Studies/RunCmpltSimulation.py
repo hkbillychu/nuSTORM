@@ -12,6 +12,13 @@ Model for calculating normalised numbers
 
     @author  Paul Kyberd
 
+
+    change the initialisation of plane to allow the definition of the position in 
+    x,y and z
+    @version    1.4
+    @date       27 July 2020
+    @author     Paul Kyberd
+
     Add differentiation between pion decay phase space and pion phase space at target;
     Add right muon beam momentum to event history;
     Add central muon momentum to introduce muon momentum acceptance cut;
@@ -540,6 +547,8 @@ if __name__ == "__main__" :
 #    controlFile = "102-Studies/pencilValidation/TLPiFlash.dict"
 # muons from transfer line
 
+    __mainPrint = False
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--dict', help='Select which run condition dictionary to use. Default: MuRingDcy[.dict]', default='MuRingDcy')
     parser.add_argument('--run', help='Select which run number to use. If no run number is specified consecutive run number is used.', default='0')
@@ -645,8 +654,9 @@ if __name__ == "__main__" :
     print("dictionary: ", controlFile)
     print ("numSIMPATH, filename, rootinputfilename, rootfilename, trfCmplxFile \n", nuSIMPATH, "\n", filename, "\n", rootInputFilename, "\n", rootFilename,
          "\n", trfCmplxFile)
+    logging.info("Control File: %s,  ", controlFile  )
     outFilename = rootFilename
-    logging.info("Parameters: %s,  \ntransfer line parameters: %s,  \nhistogram input file: %s \noutput file: %s", filename,  trfCmplxFile, rootInputFilename, rootFilename)
+    logging.info("Parameters: %s,  \n     transfer line parameters: %s,  \n     histogram input file: %s \n     output file: %s", filename,  trfCmplxFile, rootInputFilename, rootFilename)
 
 
 # Get machine and run parameters
@@ -658,7 +668,12 @@ if __name__ == "__main__" :
     detectorPosZ = nuSTRMCnst.HallWallDist()
     nuTrLnCmplx = nuTrfLineCmplx.nuSTORMTrfLineCmplx(trfCmplxFile)
 # set up the detector front face
-    fluxPlane = plane.plane(psLength, detectorPosZ)
+    zPlPos = 50.0
+    xPlPos = 0.0
+    yPlPos = 0.0
+    position = [xPlPos, yPlPos, zPlPos]
+    fluxPlane = plane.plane(position)
+#    fluxPlane = plane.plane(psLength, detectorPosZ)
 # set up the event history - instantiate
     eH = eventHistory.eventHistory()
     eH.outFile(outFilename)
@@ -674,6 +689,8 @@ for event in range(nEvents):
     pi = piEvtInst.PionEventInstance(pionMom)
 # set its values
     tsc = pi.getLclTraceSpaceCoord()
+    if __mainPrint:
+        print (f"----> main:(1) tsc is {tsc}")
     s = tsc[0]
     zl= tsc[3]
 
@@ -714,6 +731,8 @@ for event in range(nEvents):
     if ((pDistInputFlag) or (psDistInputFlag) or (pencilBeamFlag)):
         pi = piEvtInst.PionEventInstance(particleTar=pionTarget)
         tsc = pi.getLclTraceSpaceCoord()
+        if __mainPrint:
+            print (f"----> main:(2) tsc is {tsc}")
 
 # get the decay length - in the transfer line, in the production straight - or lost beyond the straight
     lifetime = pi.getLifetime()
@@ -727,6 +746,9 @@ for event in range(nEvents):
     pzMu = mu[1][2]
     pMu  = math.sqrt(pxMu*pxMu + pyMu*pyMu + pzMu*pzMu)
 # and decay the muon
+    if __mainPrint:
+        print (f"----> main: tsc for neutrinoEventInstance is {pi.getTraceSpaceCoord()}")
+
     nuEvt = nuEvtInst.NeutrinoEventInstance(pMu,pi.getTraceSpaceCoord())
 
     Absorbed = nuEvt.Absorption(pi.getTraceSpaceCoord(), pi.getmu4mmtm(), pi.getcostheta(), muonMom)
