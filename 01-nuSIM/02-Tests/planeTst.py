@@ -8,7 +8,7 @@ Test script for updated "plane2" class ...
 
 """
 
-import plane2 as plane
+import plane as plane
 import NeutrinoEventInstance as nuEvtInst
 import traceSpace as trSp
 import histoManager
@@ -20,6 +20,7 @@ from statistics import mean
 class planeTst():
 
   __DBG = False
+  __shrtRun = False
 
   histDir = "/Users/paulkyberd/work/nuStudy"
   texDir = "/Users/paulkyberd/work/nuStudy/testing.tex"
@@ -27,6 +28,7 @@ class planeTst():
   hm = histoManager.histoManager()
 
   testFails = 0
+  typPnt = 1
 
   hm = histoManager.histoManager()
 
@@ -281,45 +283,89 @@ class planeTst():
   hUpper = 300.0
   hmuzBA = hm.book(hTitle, hBins, hLower, hUpper)
 
-#   the plane plots
-  hTitle = "Detector plane: numu x position"
-  hLower = -1000.0
-  hUpper = 1000.0
-  plNumu = hm.book(hTitle, hBins, hLower, hUpper)
-  hTitle = "Detector plane: numu x small"
-#  hLower = -10.0
-#  hUpper = 10.0
-  hLower = 71.0
-  hUpper = 91.0
-  plNumuSm = hm.book(hTitle, hBins, hLower, hUpper)
-  hTitle = "Detector plane: numu y position"
+#   the plane plots - plane 1
+  hTitle = "Muon decay Plane 1: s"
+  hLower = 0.0
+  hUpper = 500.0
+  pl1MuDcyS = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 1: numu x position"
+  hLower = -200.0
+  hUpper = 200.0
+  pl1NumuX = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 1: numu x small"
+  hxLower = [-10.0,71.4]
+  hxUpper = [10.0, 91.4]
+  pl1NumuSm = hm.book(hTitle, hBins, hxLower[typPnt], hxUpper[typPnt])
+  hTitle = "Detector plane 1: numu y position"
   hLower = -10.0
   hUpper = 10.0
-  plNumuY = hm.book(hTitle, hBins, hLower, hUpper)
-  hTitle = "Detector plane: nue x position"
+  pl1NumuY = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 1: Z position"
+  hLower = -300.0
+  hUpper = 300.0
+  pl1NumuZ = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 1: nue x position"
   hLower = -1000.0
   hUpper = 1000.0
-  plNue = hm.book(hTitle, hBins, hLower, hUpper)
-  hTitle = "Detector plane: nue x small"
-  hLower = 71.0
-  hUpper = 91.0
-  plNueSm = hm.book(hTitle, hBins, hLower, hUpper)
-  hTitle = "Detector plane: nue y position"
+  pl1Nue = hm.book(hTitle, hBins, hxLower[typPnt], hxUpper[typPnt])
+  hTitle = "Detector plane 1: nue x small"
   hLower = -10.0
   hUpper = 10.0
-  plNueY = hm.book(hTitle, hBins, hLower, hUpper)
+  pl1NueSm = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 1: nue y position"
+  hLower = -10.0
+  hUpper = 10.0
+  pl1NueY = hm.book(hTitle, hBins, hLower, hUpper)
 
-  hTitle = "Decay to plane: in Z for nue"
+  hTitle = "Decay to plane 1: in Z for nue"
   hLower = -300.0
   hUpper = 300.0
-  plDelZE = hm.book(hTitle, hBins, hLower, hUpper)
-  hTitle = "Decay to plane: in Z for numu"
+  pl1DelZE = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Decay to plane 1: in Z for numu"
   hLower = -300.0
   hUpper = 300.0
-  plDelZMu = hm.book(hTitle, hBins, hLower, hUpper)
+  pl1DelZMu = hm.book(hTitle, hBins, hLower, hUpper)
 
 
+#   the plane plots - plane 2
 
+  hTitle = "Detector plane 2: numu x position"
+  hLower = -200.0
+  hUpper = 200.0
+  pl2NumuX = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 2: numu x small"
+  hLower = -10.0
+  hUpper = 10.0
+  pl2NumuSm = hm.book(hTitle, hBins, hxLower[typPnt], hxUpper[typPnt])
+  hTitle = "Detector plane 2: numu y position"
+  hLower = -10.0
+  hUpper = 10.0
+  pl2NumuY = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 2: Z position"
+  hLower = -300.0
+  hUpper = 300.0
+  pl2NumuZ = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 2: numu x small"
+  hLower = -10.0
+  hUpper = 10.0
+  pl2Nue = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Detector plane 2: nue x small"
+  hLower = -10.0
+  hUpper = 10.0
+  pl2NueSm = hm.book(hTitle, hBins, hxLower[typPnt], hxUpper[typPnt])
+  hTitle = "Detector plane 2: nue y position"
+  hLower = -10.0
+  hUpper = 10.0
+  pl2NueY = hm.book(hTitle, hBins, hLower, hUpper)
+
+  hTitle = "Decay to plane 2: in Z for nue"
+  hLower = -300.0
+  hUpper = 300.0
+  pl2DelZE = hm.book(hTitle, hBins, hLower, hUpper)
+  hTitle = "Decay to plane 2: in Z for numu"
+  hLower = -300.0
+  hUpper = 300.0
+  pl2DelZMu = hm.book(hTitle, hBins, hLower, hUpper)
 
 
   ##! Start:
@@ -329,15 +375,22 @@ class planeTst():
   planeTest = 1
   print()
   print("planeTest:", planeTest, " check constructor.")
-  zPos = -50.0
-  xPos = 81.4
+  xPos = [0.0, 81.4]
+  print(f"xPos is {xPos}")
   yPos = 0.0
-  position = [xPos, yPos, zPos]
-
-  d1 = plane.plane(position)
+  zPos1 = 230.0
+  position1 = [xPos[typPnt], yPos, zPos1]
+  d1 = plane.plane(position1)
   if (__DBG): print (f"d1 is {d1}")
 
-  sVal = 100.0
+  yPos = 0.0
+  zPos2 = -50.0
+  position2 = [xPos[typPnt], yPos, zPos2]
+  d2 = plane.plane(position2)
+  if (__DBG): print (f"d2 is {d2}")
+
+
+  sVal = 140.0  
   xVal = 0.0
   yVal = 0.0
   zVal = sVal - 50.0
@@ -352,25 +405,36 @@ class planeTst():
   tArc = 0
   bArc = 0
   ringErr = 0
-  dirENu = 0
-  dirMuNu = 0
+  dirENu1 = 0
+  dirMuNu1 = 0
   negMuMom = 0
+  dirENu2 = 0
+  dirMuNu2 = 0
 
-  xCompECt = 0
-  xCompMuCt = 0
-  xCompECtFl = 0
-  xCompMuCtFl = 0
+  noDcyLengthCut = 0
+
+  xCompECt1 = 0
+  xCompMuCt1 = 0
+  xCompECtFl1 = 0
+  xCompMuCtFl1 = 0
+  xCompECt2 = 0
+  xCompMuCt2 = 0
+  xCompECtFl2 = 0
+  xCompMuCtFl2 = 0
+
+  
+#  need to create a set up for creation of neutrino event instance
+  nuSIMPATH = os.getenv('nuSIMPATH')
+  filename  = os.path.join(nuSIMPATH, \
+                         '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
+  pMuCentral= 6.0
 
   for count in range(20000):
 
     if (__DBG): 
       print ("\n======================================================")
       print(f"count is {count}")
-#  need to create a neutrino event instance
-    nuSIMPATH = os.getenv('nuSIMPATH')
-    filename  = os.path.join(nuSIMPATH, \
-                         '11-Parameters/nuSTORM-PrdStrght-Params-v1.0.csv')
-    pMuCentral= 3.0
+
     nuEI = nuEvtInst.NeutrinoEventInstance(pMuCentral,tS)
     if (__DBG): print(f"     nuEI {nuEI}")
 
@@ -394,8 +458,10 @@ class planeTst():
     dcyPos = nuEI.getTraceSpaceCoord()  # checked z is same as the value in nuEI
     if (__DBG): print(f"      dcyPos  s:{dcyPos[0]}  x:{dcyPos[1]}  y:{dcyPos[2]}  z:{dcyPos[3]}  xp:{dcyPos[4]}  yp:{dcyPos[5]}")
 
-
+    if (dcyPos[0] < 300): continue
+    pl1MuDcyS.Fill(dcyPos[0])
     arcFlg = False
+    noDcyLengthCut = noDcyLengthCut + 1
     if (dcyPos[3] >= 0.0 and dcyPos[3] <=180.0):
       if (dcyPos[1] < 20.0):
         if (__DBG): print (f"                      In straight z: {dcyPos[3]}")
@@ -416,6 +482,10 @@ class planeTst():
         hpymuPS.Fill(pMu[1])
         hpzmuPS.Fill(pMu[2])
         ps = ps + 1
+        if (__DBG): print (f"typPnt  PS: {typPnt}")
+        if typPnt == 0: 
+          arcFlg = True
+          if (__DBG): print (f"arcFlg  {arcFlg}")
       elif (dcyPos[1] >= 20.0):
         if (__DBG): print (f"                      In return straight z: {dcyPos[3]}")
         hmusRS.Fill(dcyPos[0])
@@ -435,7 +505,10 @@ class planeTst():
         hpymuRS.Fill(pMu[1])
         hpzmuRS.Fill(pMu[2])
         rs = rs + 1
-        arcFlg = True
+        if (__DBG): print (f"typPnt  RS: {typPnt}")
+        if typPnt == 1: 
+          arcFlg = True
+          if (__DBG): print (f"arcFlg  {arcFlg}")
     elif (dcyPos[3] < 0.0):
       if (__DBG): print (f"                      In top arc z: {dcyPos[3]}")
       tArc = tArc + 1
@@ -484,59 +557,119 @@ class planeTst():
     yDetPosMu = 0.0
 
     if arcFlg:
-      deltaZE = zPos - dcyPos[3]
-      deltaZMu = zPos - dcyPos[3]
+      deltaZE1 = zPos1 - dcyPos[3]
+      deltaZMu1 = zPos1 - dcyPos[3]
 
       if (__DBG): 
-        print (f"      deltaZE {deltaZE}")
-        print (f"      deltaZMu {deltaZMu}")
+        print (f"      deltaZE1 {deltaZE1}")
+        print (f"      deltaZMu1 {deltaZMu1}")
 
       hitE,hitMu=d1.findHitPositionMuEvt(nuEI)
 
-      if np.sign(deltaZE) == np.sign(pEZ):
-        if (__DBG): print ("          e neutrino in the right direction")
-        dirENu = dirENu + 1
-        xDetPosE = dcyPos[1] + deltaZE*pE[0]/pE[2]
-        yDetPosE = dcyPos[2] + deltaZE*pE[1]/pE[2]
-        plNue.Fill(xDetPosE)
-        plNueSm.Fill(xDetPosE)
-        plNueY.Fill(yDetPosE)
-        plDelZE.Fill(deltaZE)
-        if (__DBG): print (f"         xDetPosE {xDetPosE}    yDetPosE {yDetPosE}     zPos {zPos}")
+      if np.sign(deltaZE1) == np.sign(pEZ):
+        if (__DBG): print (f"          e neutrino in the right direction plane 1    deltaZE1 {deltaZE1}     pEZ {pEZ}")
+        dirENu1 = dirENu1 + 1
+        xDetPosE = dcyPos[1] + deltaZE1*pE[0]/pE[2]
+        yDetPosE = dcyPos[2] + deltaZE1*pE[1]/pE[2]
+        pl1Nue.Fill(xDetPosE)
+        pl1NueSm.Fill(xDetPosE)
+        pl1NueY.Fill(yDetPosE)
+        pl1DelZE.Fill(deltaZE1)
+        if (__DBG): print (f"         xDetPosE {xDetPosE}    yDetPosE {yDetPosE}     zPos1 {zPos1}")
 
-        if np.abs(hitE[0] - xDetPosE + xPos) < 0.0001:
+        if np.abs(hitE[0] - xDetPosE + xPos[typPnt]) < 0.0001:
           if (__DBG): 
             print("\n\nOK .... OK .... OK .... OK .... OK .... OK .... \n\n")
             print(f"hitE[0] {hitE[0]}     xDetPos  {xDetPosE}")
-          xCompECt = xCompECt + 1
+          xCompECt1 = xCompECt1 + 1
         else:
-          xCompECtFl = xCompECtFl + 1
+          xCompECtFl1 = xCompECtFl1 + 1
           if (__DBG): 
             print("\n\nFailed .... Failed .... Failed .... Failed .... \n\n")
             print(f"hitE[0] {hitE[0]}     xDetPosE  {xDetPosE}")
 
 
-      if np.sign(deltaZMu) == np.sign(pNuMuZ):
-        if (__DBG): print ("          mu neutrino in the right direction")
-        dirMuNu = dirMuNu + 1
-        xDetPosMu = dcyPos[1] + deltaZE*pNuMu[0]/pNuMu[2]
-        yDetPosMu = dcyPos[2] + deltaZE*pNuMu[1]/pNuMu[2]
-        plNumu.Fill(xDetPosMu)
-        plNumuSm.Fill(xDetPosMu)
-        plNumuY.Fill(yDetPosMu)
-        plDelZMu.Fill(deltaZMu)
-        if (__DBG): print (f"         xDetPosMu {xDetPosMu}    yDetPosMu {yDetPosMu}     zPos {zPos}")
+      if np.sign(deltaZMu1) == np.sign(pNuMuZ):
+        if (__DBG): print (f"          mu neutrino in the right direction plane 1  deltaZMu1 {deltaZMu1}     pEZ {pNuMuZ}")
+        dirMuNu1 = dirMuNu1 + 1
+        xDetPosMu = dcyPos[1] + deltaZMu1*pNuMu[0]/pNuMu[2]
+        yDetPosMu = dcyPos[2] + deltaZMu1*pNuMu[1]/pNuMu[2]
+        pl1NumuX.Fill(xDetPosMu)
+        pl1NumuSm.Fill(xDetPosMu)
+        pl1NumuY.Fill(yDetPosMu)
+        pl1NumuZ.Fill(zPos1)
+        pl1DelZMu.Fill(deltaZMu1)
+        if (__DBG): print (f"         xDetPosMu {xDetPosMu}    yDetPosMu {yDetPosMu}     zPos1 {zPos1}")
 
-        if np.abs(hitMu[0] - xDetPosMu + xPos) < 0.0001:
+        if np.abs(hitMu[0] - xDetPosMu + xPos[typPnt]) < 0.0001:
           if (__DBG): 
             print("\n\nOK .... OK .... OK .... OK .... OK .... OK .... \n\n")
             print(f"hitMu[0] {hitMu[0]}     xDetPosMu  {xDetPosMu}")
-          xCompMuCt = xCompMuCt + 1
+          xCompMuCt1 = xCompMuCt1 + 1
         else:
-          xCompMuCtFl = xCompMuCtFl + 1
+          xCompMuCtFl1 = xCompMuCtFl1 + 1
           if (__DBG): 
             print("\n\nFailed .... Failed .... Failed .... Failed .... \n\n")
             print(f"hitMu[0] {hitMu[0]}     xDetPosMu  {xDetPosMu}")
+
+    if arcFlg:
+      deltaZE2 = zPos2 - dcyPos[3]
+      deltaZMu2 = zPos2 - dcyPos[3]
+
+      if (__DBG): 
+        print (f"      deltaZE2 {deltaZE2}")
+        print (f"      deltaZMu2 {deltaZMu2}")
+
+      hitE,hitMu=d2.findHitPositionMuEvt(nuEI)
+
+      if np.sign(deltaZE2) == np.sign(pEZ):
+        if (__DBG): print (f"          e neutrino in the right direction plane 2  deltaZE2 {deltaZE2}     pEZ {pEZ}")
+        dirENu2 = dirENu2 + 1
+        xDetPosE = dcyPos[1] + deltaZE2*pE[0]/pE[2]
+        yDetPosE = dcyPos[2] + deltaZE2*pE[1]/pE[2]
+        pl2Nue.Fill(xDetPosE)
+        pl2NueSm.Fill(xDetPosE)
+        pl2NueY.Fill(yDetPosE)
+        pl2NumuZ.Fill(zPos2)
+        pl2DelZE.Fill(deltaZE2)
+        if (__DBG): print (f"         xDetPosE {xDetPosE}    yDetPosE {yDetPosE}     zPos {zPos2}")
+
+        if np.abs(hitE[0] - xDetPosE + xPos[typPnt]) < 0.0001:
+          if (__DBG): 
+            print("\n\nOK .... OK .... OK .... OK .... OK .... OK .... \n\n")
+            print(f"hitE[0] {hitE[0]}     xDetPos  {xDetPosE}")
+          xCompECt2 = xCompECt2 + 1
+        else:
+          xCompECtFl2 = xCompECtFl2 + 1
+          if (__DBG): 
+            print("\n\nFailed .... Failed .... Failed .... Failed .... \n\n")
+            print(f"hitE[0] {hitE[0]}     xDetPosE  {xDetPosE}")
+
+
+      if np.sign(deltaZMu2) == np.sign(pNuMuZ):
+        if (__DBG): print (f"          mu neutrino in the right direction plane 2  deltaZMu2 {deltaZMu2}     pNuMuZ {pNuMuZ}")
+        dirMuNu2 = dirMuNu2 + 1
+        xDetPosMu = dcyPos[1] + deltaZMu2*pNuMu[0]/pNuMu[2]
+        yDetPosMu = dcyPos[2] + deltaZMu2*pNuMu[1]/pNuMu[2]
+        pl2NumuX.Fill(xDetPosMu)
+        pl2NumuSm.Fill(xDetPosMu)
+        pl2NumuY.Fill(yDetPosMu)
+        pl2DelZMu.Fill(deltaZMu2)
+        if (__DBG): print (f"         xDetPosMu {xDetPosMu}    yDetPosMu {yDetPosMu}     zPos2 {zPos2}")
+
+        if np.abs(hitMu[0] - xDetPosMu + xPos[typPnt]) < 0.0001:
+          if (__DBG): 
+            print("\n\nOK .... OK .... OK .... OK .... OK .... OK .... \n\n")
+            print(f"hitMu[0] {hitMu[0]}     xDetPosMu  {xDetPosMu}")
+          xCompMuCt2 = xCompMuCt2 + 1
+        else:
+          xCompMuCtFl2 = xCompMuCtFl2 + 1
+          if (__DBG): 
+            print("\n\nFailed .... Failed .... Failed .... Failed .... \n\n")
+            print(f"hitMu[0] {hitMu[0]}     xDetPosMu  {xDetPosMu}")
+
+
+
 
       if pMu[0] < -0.25: 
         negMuMom = negMuMom + 1
@@ -547,21 +680,26 @@ class planeTst():
   print(f"       top arc decays {tArc}")
   print(f"       bottom arc decays {bArc}")
   print(f"       ring errors {ringErr}")
+  print(f"       noDcyLengthCut {noDcyLengthCut}")
 
-  print(f"       dirENu {dirENu}")
-  print(f"       dirMuNu {dirMuNu}")
+  print(f"       dirENu1 {dirENu1}")
+  print(f"       dirMuNu1 {dirMuNu1}")
+  print(f"       dirENu2 {dirENu2}")
+  print(f"       dirMuNu2 {dirMuNu2}")
   print(f"       negMuMom {negMuMom}")
 
-  print(f"       xCompECt  {xCompECt}      xCompECtFl  {xCompECtFl}")
-  print(f"       xCompMuCt  {xCompMuCt}    xCompMuCtFl  {xCompMuCtFl}")
+  print(f"       xCompECt1  {xCompECt1}      xCompECtFl1  {xCompECtFl1}")
+  print(f"       xCompMuCt1  {xCompMuCt1}    xCompMuCtFl1  {xCompMuCtFl1}")
+  print(f"       xCompECt2  {xCompECt2}      xCompECtFl2  {xCompECtFl2}")
+  print(f"       xCompMuCt2  {xCompMuCt2}    xCompMuCtFl2  {xCompMuCtFl2}")
 
   #hmusPS.Fit('gaus')
   #hmusRS.Fit('gaus')
   #hmusTA.Fit('gaus')
   #musBA.Fit('gaus')
 
-
-  hm.histdo(histDir)
+  print(f"shrtRun is {__shrtRun}")
+  if __shrtRun == False: hm.histdo(histDir)
 
   passed = 0
   failed = 0
@@ -572,7 +710,7 @@ class planeTst():
   print("========  plane2: tests complete  ========")
   print ("testFails is ", testFails)
 
-  hm.texCreate(texDir)
+  if __shrtRun == False: hm.texCreate(texDir)
 
   if (testFails == 0):
     sys.exit(0)
