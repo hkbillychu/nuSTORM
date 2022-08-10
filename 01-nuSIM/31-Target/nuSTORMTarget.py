@@ -104,7 +104,7 @@ class hornPars():
         dzUpsAr = (self.LUps - self.thick)/(nUps*1.0)
         drUpsAr = (self.rUps - self.rIn)
         for i in range(nUps+1):
-            z = dzUpsAr*i
+            z = dzUpsAr*i + self.thick
             r = self.rIn + drUpsIC*math.cos(dPhi*i) + self.thick
             self.zUpsAr.append(z)
             self.rInUpsAr.append(0.0)
@@ -343,17 +343,17 @@ def createHorn(hP, gReg):
     hornDwnAr = g4.solid.Polycone('hornDwnAr', 0.0, twoPi, hP.zDwnAr, hP.rInDwnAr, hP.rOutDwnAr, gReg)
 
     # Subtract upstream polycone from main cylinder
-    posUpsAr = [0.0, 0.0, -0.5*hP.LTot + hP.thick]
+    posUpsAr = [0.0, 0.0, -0.5*hP.LTot]
     hornArA  = g4.solid.Subtraction('hornArA', hornArCyl, hornUpsAr, [zeroRot, posUpsAr], gReg)
 
     # Subtract downstream polycone from previous shape
-    posDwnAr = [0.0, 0.0, -0.5*hP.LTot + hP.thick]
+    posDwnAr = [0.0, 0.0, -0.5*hP.LTot]
     hornAr  = g4.solid.Subtraction('hornAr', hornArA, hornDwnAr, [zeroRot, posDwnAr], gReg)
 
     # Logical and physical volumes
     hornArL = g4.LogicalVolume(hornAr, 'ARGON', 'hornArL', gReg)
     hornArPos = [0.0, 0.0, 0.0]
-    hornConPhys = g4.PhysicalVolume(zeroRot, hornArPos, hornArL, 'hornArPhys', hornConL, gReg)
+    hornArPhys = g4.PhysicalVolume(zeroRot, hornArPos, hornArL, 'hornArPhys', hornConL, gReg)
 
     
 def createTarget(tP, gReg):
@@ -373,7 +373,7 @@ def createTarget(tP, gReg):
 
 def defineAperture(hP, gReg):
 
-    print('Defining 10 mm long tracking aperture')
+    print('Defining 2 mm long tracking aperture')
 
     worldL = gReg.getWorldVolume()
 
