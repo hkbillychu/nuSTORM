@@ -26,7 +26,7 @@ to be recompiled and linked. The field is `B = 0.02*I(kA)/r(cm) Tesla` for horn 
 `I` and radius `r`.
 3. [FieldPars.dat](Fluka/FieldPars.dat) contains 2 parameters: the horn current (kA) and
 whether the current direction is positive (1.0) or negative (-1.0). This is used by the
-`magfld.f` code. The nominal current is 219 kA (from the Fermilab optimisation study).
+`magfld.f` code. The nominal current is +219 kA (from the Fermilab optimisation study).
 4. [mgdraw.f](Fluka/mgdraw.f) is a user routine to track pions and muons crossing the
 downstream end of the horn within the outer conductor horn radius. This file also needs
 to be placed in the `FlukaInstall/src/user` directory.
@@ -35,6 +35,49 @@ run in order to compile the above `magfld.f` and `mgdraw.f` user routines, and t
 them in the Fluka executable, along with the `DPMJET` physics routines for hadronic
 interaction and radioisotope modeling. The `FLUPRO` environment variable needs to
 specify the full directory location of the Fluka installation.
+
+#### Build and run instructions (CERN releases)
+
+1. Download FLUKA from the [CERN](https://fluka.cern/download/latest-fluka-release) release page,
+which requires at least a lightweight CERN account. You must also
+[register](https://fluka.cern/download/registration) and wait for approval
+(typically within a few working days). Version **4-3.0** and above is recommended.
+2. Install FLUKA following the [instructions](https://fluka.cern/documentation/installation).
+An example for 64-bit unix using the `gfortran9` compiler and `csh` (`tcsh`) would be:
+```
+tar zxvf fluka-4-3.0.x86-Linux-gfor9.tgz
+cd fluka4-3.0
+setenv FLUPRO ${PWD}
+cd src
+make
+```
+This creates the default FLUKA executables `fluka` and `flukadpm` (the latter is recommended) as well
+as various auxiliary programs (for processing, converting and merging output files) in the directory
+`$FLUPRO/bin`.
+3. Copy (overwite) the [magfld.f](Fluka/magfld.f) (magnetic field) and [mgdraw.f](Fluka/mgdraw.f)
+(particle tracking screen) files from the `nuSTORM/01-nuSIM/31-Target/Fluka` directory to the
+`$FLUPRO/src/user` directory, where FLUPRO is the directory name of the FLUKA installation.
+4. Create the `$FLUPRO/bin/flukadpm3` FLUKA executable to include the magnetic field
+and particle tracking screen routines (`flukadpm3` could also be called anything you want):
+```
+cd $FLUPRO/src
+$FLUPRO/bin/fff user/magfld.f
+$FLUPRO/bin/fff user/mgdraw.f
+$FLUPRO/bin/ldpmqmd -o $FLUPRO/bin/flukadpm3 user/magfld.o user/mgdraw.o
+```
+5. Copy the [FieldPars.dat](Fluka/FieldPars.dat) one-line file that specifies the horn current
+(in kA) and polarity (1.0 for positive, -1.0 for negative) that is used by the magnetic field
+routine [magfld.f](Fluka/magfld.f). The default current setting is +219kA, and different values
+can be used in [FieldPars.dat](Fluka/FieldPars.dat).
+6. Run the FLUKA executable `flukadpm3` with the [nuSTORMTarget.inp](Fluka/nuSTORMTarget.inp) input file
+```
+$FLUPRO/bin/rfluka -e $FLUPRO/bin/flukadpm3 -N0 -M1 nuSTORMTarget
+```
+The `rfluka` script uses the selected executable (-e) followed by the run numbers and the
+input file (which excludes the `.inp` extension). If successful, this will create the various
+output files described below.
+7. The geometry can be modified by using the [nuSTORMTarget.py](nuSTORMTarget.py) python script.
+This will automatically create an updated `nuSTORMTarget.inp` input file.
 
 #### Output files
 The Fluka simulation creates several output files. Assuming the Fluka input file is called
