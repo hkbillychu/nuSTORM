@@ -24,6 +24,7 @@ import sys, os
 from pathlib import Path            # checking for file existance
 import csv                          # so I can read a synthetic data file
 import math
+from datetime import datetime
 
 # nuStorm imports
 import eventHistory as eventHistory
@@ -43,24 +44,29 @@ descriptions=[]
 locations=[]
 testStatus=[]
 
-# Pions Flash in the production straight
-#controlFile = "102-Studies/pencilValidation/PSPiFlash.dict"
-# Muons decay in ring, after first pass of the production straight
-#controlFile = "102-Studies/pencilValidation/PSMuRingDcy.dict"
-# Muons decay in production straight with pions.
-#controlFile = "102-Studies/pencilValidation/TLPiFlash.dict"
-#controlFile = "102-Studies/pencilValidation/PSMuDcy.dict"
+
 # muons from transfer line
 StudyDir = os.getenv('StudyDir')
 StudyName = os.getenv('StudyName')
-controlFile = os.path.join(StudyDir, "PSPiFLash.dict")
-#controlFile = "StudyDir/StudyName/TLmuonDecay.dict"
 
-##controlFile = "101-Studies/bdSimBeam01/PSPiFlash.dict"
+# get the current run number
+rNFile = StudyDir  + "/runNumber"
+rN = open(rNFile, "r")
+runNumber = int(rN.readline())
+rN.close()
 
-##controlFile = "101-Studies/bdSimBeam01/PSMuDcyCF.dict"
-
-##controlFile = "101-Studies/pencilValidation/PSMuDcyControlFile.dict"
+# find and open logfile for reading
+logFileName =os.environ['StudyDir'] + "/" + os.environ["StudyName"] + "/" + "normalisation"  + str(runNumber) + ".log"
+lFile = open(logFileName, "r")
+# read to get the control file used on the run that produced this log file
+for line in lFile:
+  index = line.find("Control File")
+  if index > 0:
+    start = line.find('/')
+    end = line.find('.dict')
+    print ("end is ---",end)
+    controlFile = line[start: end+5]
+    break
 
 ## control file shared with the normalisation code
 ctrlInst = control.control(controlFile)
@@ -70,7 +76,9 @@ ctrlInst = control.control(controlFile)
 logging.basicConfig(filename=ctrlInst.logFile(), encoding='utf-8', level=logging.INFO)
 print("========  analysing the eventHistory start  ========")
 logging.info("\n\n")
-logging.info("========  analysing the eventHistory: start  ======== Version %s", aHVersion)
+now = datetime.now()
+dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+logging.info("========  analysing the eventHistory: start  ======== Version %s... %s", aHVersion, dt_string)
 logging.info("Control file %s", controlFile)
 
 objRd = eventHistory.eventHistory()
@@ -269,7 +277,8 @@ for pnt in range(nEvent):
 
 
 
-#hm.histdo()
+histFile = os.path.join(StudyDir, ctrlInst.studyName())
+hm.histdo(histFile)
 fileName = os.path.join(StudyDir, ctrlInst.studyName() + "/plots" + str(ctrlInst.runNumber()) + ".root")
 print (fileName)
 hm.histOutRoot(fileName)
