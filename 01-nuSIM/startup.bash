@@ -18,12 +18,12 @@ add1="/01-Code"
 add2="/12-examples"
 add3="/04-Studies"
 #echo $add
-dir1="$stm$add"
+dir1="$stm$add1"
 dir2="$stm$add2"
 dir3="$stm$add3"
 
 #echo $dir
 echo "Set PYTHON path:"
-PYTHONPATH="${PYTHONPATH}:$dir:$dir2:$dir3"
+PYTHONPATH="${PYTHONPATH}:$dir1:$dir2:$dir3"
 echo "    " $PYTHONPATH
 export PYTHONPATH
