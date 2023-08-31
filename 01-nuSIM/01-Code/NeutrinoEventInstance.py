@@ -174,6 +174,13 @@ class NeutrinoEventInstance:
         ct = Dcy.getLifetime()
         s  = DcyCoord[0]
 
+        if NeutrinoEventInstance.__Debug:
+            print(f"    ----> CreateNeutrinos: z {DcyCoord[3]}")
+            print(f"    ----> CreateNeutrinos: s {DcyCoord[0]}")
+            print(f"    ----> CreateNeutrinos: t {ct}")
+            
+
+
         # if z > (PrdStrghtLngth+ArcRad+1.):
         #     print("     ----> !!!! CreateNeutrinos Alarm:", z)
 
@@ -246,6 +253,14 @@ class NeutrinoEventInstance:
 
         s   = v * gamma * Dcy.getLifetime()
         if NeutrinoEventInstance.__Debug:
+            print(f"         ----> GenerateLongiPos: Emu for muon: {Emu}")
+            print(f"         ----> GenerateLongiPos: Pmu for muon: {Pmu}")
+            print(f"         ----> GenerateLongiPos: beta for muon: {beta}")
+            print(f"         ----> GenerateLongiPos: gamma for muon: {gamma}")
+            print(f"         ----> GenerateLongiPos: mass for muon: {NeutrinoEventInstance.__mumass}")
+            print(f"         ----> GenerateLongiPos: c: {NeutrinoEventInstance.__sol}")
+            print(f"         ----> GenerateLongiPos: v for muon: {v}")
+
             print(f"         ----> GenerateLongiPos: s for the muon: {s}")
 
         return s
